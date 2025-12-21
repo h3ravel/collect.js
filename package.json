@@ -6,7 +6,7 @@
   "typings": "index.d.ts",
   "type": "module",
   "scripts": {
-    "all": "pnpm run barrel && pnpm run build && pnpm test && pnpm run eslint && pnpm run validate-version",
+    "all": "pnpm run barrel && pnpm run build && pnpm test --watch=false && pnpm run eslint && pnpm run validate-version",
     "lint": "eslint . --ext .ts --ext .js",
     "pretest": "pnpm run transpile",
     "test": "vitest",
