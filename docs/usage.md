@@ -4,21 +4,21 @@
 
 ```js
 // Using require
-const collect = require('collect.js');
+const collect = require('@h3ravel/collect.js');
 
 collect(products).where('price', '>', 299).sortBy('brand');
 ```
 
 ```js
 // Using import
-import collect from 'collect.js';
+import collect from '@h3ravel/collect.js';
 
 collect(products).where('price', '>', 299).sortBy('brand');
 ```
 
 ```js
 // Using the underlying class
-import { Collection } from 'collect.js';
+import { Collection } from '@h3ravel/collect.js';
 
 new Collection(products).where('price', '>', 299).sortBy('brand');
 ```
@@ -26,7 +26,7 @@ new Collection(products).where('price', '>', 299).sortBy('brand');
 ## TypeScript
 
 ```ts
-import collect from 'collect.js';
+import collect from '@h3ravel/collect.js';
 
 collect(products).where('price', '>', 299).sortBy('brand');
 ```
