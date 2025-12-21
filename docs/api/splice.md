@@ -48,4 +48,4 @@ collection.all();
 // [1, 2, 10, 11, 4, 5]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/splice.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/splice.js)

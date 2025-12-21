@@ -1,5 +1,5 @@
 # `unlessNotEmpty()`
 
-Alias for the [`whenEmpty()`](#whenEmpty) method
+Alias for the [`whenEmpty()`](/api/whenEmpty) method
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/unlessNotEmpty.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/unlessNotEmpty.js)

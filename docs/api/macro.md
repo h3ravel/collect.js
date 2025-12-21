@@ -4,7 +4,7 @@ The macro method lets you register custom methods
 
 ```js
 collect().macro('uppercase', function () {
-  return this.map(item => item.toUpperCase());
+  return this.map((item) => item.toUpperCase());
 });
 
 const collection = collect(['a', 'b', 'c']);
@@ -18,4 +18,4 @@ collection.all();
 
 > Note that the `macro` method returns `undefined`, and therefore it is not possible to use it within a chain of methods.
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/macro.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/macro.js)

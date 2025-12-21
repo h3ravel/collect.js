@@ -15,4 +15,4 @@ collect([2, 4, 3, 1, 5])
 // 1
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/tap.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/tap.js)

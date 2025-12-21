@@ -72,7 +72,9 @@ const collection = collect([
   },
 ]);
 
-const grouped = collection.groupBy((item, key) => item.manufacturer.substring(0, 3));
+const grouped = collection.groupBy((item, key) =>
+  item.manufacturer.substring(0, 3)
+);
 
 grouped.all();
 
@@ -106,4 +108,4 @@ grouped.all();
 // }
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/groupBy.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/groupBy.js)

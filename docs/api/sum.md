@@ -30,9 +30,9 @@ const collection = collect([
   { name: 'Bookcase', colors: ['Red', 'Beige', 'Brown'] },
 ]);
 
-const total = collection.sum(product => product.colors.length);
+const total = collection.sum((product) => product.colors.length);
 
 // 6
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/sum.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/sum.js)

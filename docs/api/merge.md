@@ -30,4 +30,4 @@ merged.all();
 // ['Unicorn', 'Rainbow', 'Sunshine', 'Rainbow']
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/merge.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/merge.js)

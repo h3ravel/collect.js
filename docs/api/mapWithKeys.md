@@ -16,7 +16,7 @@ const collection = collect([
   },
 ]);
 
-const keyed = collection.mapWithKeys(item => [item.email, item.name]);
+const keyed = collection.mapWithKeys((item) => [item.email, item.name]);
 
 keyed.all();
 
@@ -26,4 +26,4 @@ keyed.all();
 // }
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/mapWithKeys.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/mapWithKeys.js)

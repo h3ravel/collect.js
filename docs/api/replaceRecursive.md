@@ -6,11 +6,7 @@ This method works like replace, but it will recurse into arrays and apply the sa
 const collection = collect([
   'Matip',
   'van Dijk',
-  [
-    'Núñez',
-    'Firmino',
-    'Salah',
-  ],
+  ['Núñez', 'Firmino', 'Salah'],
 ]);
 
 const replaced = collection.replaceRecursive({
@@ -27,4 +23,4 @@ replaced.all();
 // }
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/replaceRecursive.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/replaceRecursive.js)

@@ -18,13 +18,11 @@ filtered.all();
 ```
 
 ```js
-collect([1, 2, 3, 4])
-  .only([2, 12])
-  .all();
+collect([1, 2, 3, 4]).only([2, 12]).all();
 
 // [2]
 ```
 
 > For the inverse of `only`, see the `except` method.
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/only.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/only.js)

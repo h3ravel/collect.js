@@ -12,4 +12,4 @@ collection.all();
 // ['JavaScript', 'Python', 'Ruby']
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/put.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/put.js)

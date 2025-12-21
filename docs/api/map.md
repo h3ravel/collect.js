@@ -5,7 +5,7 @@ The map method iterates through the collection and passes each value to the give
 ```js
 const collection = collect([1, 2, 3, 4, 5]);
 
-const multiplied = collection.map(item => item * 2);
+const multiplied = collection.map((item) => item * 2);
 
 multiplied.all();
 
@@ -14,4 +14,4 @@ multiplied.all();
 
 > Like most other collection methods, `map` returns a new collection instance; it does not modify the collection it is called on. If you want to transform the original collection, use the `transform` method.
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/map.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/map.js)

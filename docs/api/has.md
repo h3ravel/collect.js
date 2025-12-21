@@ -21,4 +21,4 @@ collection.has(['animal', 'ability', 'name']);
 // false
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/has.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/has.js)

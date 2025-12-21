@@ -7,10 +7,7 @@ const Player = function (name) {
   this.name = name;
 };
 
-const collection = collect([
-  'Roberto Firmino',
-  'Darwin Núñez',
-]);
+const collection = collect(['Roberto Firmino', 'Darwin Núñez']);
 
 const players = collection.mapInto(Player);
 
@@ -22,4 +19,4 @@ players.all();
 // ]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/mapInto.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/mapInto.js)

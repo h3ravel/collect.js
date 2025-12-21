@@ -31,4 +31,4 @@ intersect.all();
 // [1, 2, 3]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/intersectByKeys.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/intersectByKeys.js)

@@ -11,7 +11,7 @@ const collection = collect([
   { id: 4, name: 'b' },
 ]);
 
-const groups = collection.mapToDictionary(item => [item.name, item.id]);
+const groups = collection.mapToDictionary((item) => [item.name, item.id]);
 
 groups.all();
 
@@ -22,4 +22,4 @@ groups.all();
 // }
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/mapToDictionary.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/mapToDictionary.js)

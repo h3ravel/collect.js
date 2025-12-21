@@ -44,7 +44,7 @@ const collection = collect([
   { name: 'Galaxy Gear', brand: 'Samsung', type: 'watch' },
 ]);
 
-const unique = collection.unique(item => item.brand + item.type);
+const unique = collection.unique((item) => item.brand + item.type);
 
 unique.all();
 
@@ -56,4 +56,4 @@ unique.all();
 // ]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/unique.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/unique.js)

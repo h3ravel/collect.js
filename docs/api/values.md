@@ -17,4 +17,4 @@ values.all();
 // [12, 'xoxo', 'abab', '1337']
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/values.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/values.js)

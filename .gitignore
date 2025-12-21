@@ -9,3 +9,5 @@ coverage
 .DS_Store
 package-lock.json
 docs/.vuepress/dist/*
+.vitepress/cache
+.vitepress/dist

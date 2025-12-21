@@ -26,4 +26,4 @@ oneRandom.all();
 // [3]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/random.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/random.js)

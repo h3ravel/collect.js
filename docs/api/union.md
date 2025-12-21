@@ -23,4 +23,4 @@ union.all();
 // }
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/union.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/union.js)

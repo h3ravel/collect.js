@@ -1,3 +1,3 @@
-# <img src="https://raw.githubusercontent.com/ecrmnn/collect.js/master/collectjs.jpg" alt="collect.js">
+# <img src="https://raw.githubusercontent.com/h3ravel/collect.js/main/collectjs.jpg" alt="collect.js">
 
-> Convenient and dependency free wrapper for working with arrays and objects
+> Convenient and dependency free wrapper for working with arrays and objects, completely rewritten in Typescript and actively maintained.

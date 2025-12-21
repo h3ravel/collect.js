@@ -34,4 +34,4 @@ collection.each((item) => {
 // 7
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/each.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/each.js)

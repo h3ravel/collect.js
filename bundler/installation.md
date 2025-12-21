@@ -3,23 +3,29 @@
 #### NPM
 
 ```bash
-npm install collect.js --save
+npm install @h3ravel/collect.js --save
+```
+
+#### PNPM
+
+```bash
+pnpm add @h3ravel/collect.js
 ```
 
 #### Yarn
 
 ```bash
-yarn add collect.js
+yarn add @h3ravel/collect.js
 ```
 
 #### From CDN
 
-1. Visit https://cdnjs.com/libraries/collect.js
+1. Visit https://cdnjs.com/libraries/@h3ravel/collect.js
 2. Add CDN link to your site with `<script>`
 
 #### Using build / minified version
 
-1. Download [`collect.min.js`](https://github.com/ecrmnn/collect.js/blob/master/build/collect.min.js)
+1. Download [`collect.min.js`](https://github.com/h3ravel/collect.js/blob/main/build/collect.min.js)
 2. Add to your site with `<script>`
 
 ### Tip

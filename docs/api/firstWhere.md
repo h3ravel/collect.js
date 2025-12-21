@@ -15,4 +15,4 @@ collection.firstWhere('name', 'Linda');
 // { name: 'Linda', age: 14 }
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/firstWhere.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/firstWhere.js)

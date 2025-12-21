@@ -8,4 +8,4 @@ collect([1, 2, 3, 4]).every((value, key) => value > 2);
 // false
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/every.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/every.js)

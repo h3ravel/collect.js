@@ -3,13 +3,17 @@
 The `whereNull` method filters items where the given key is null.
 
 ```js
-const collection = collect([{
-  name: 'Mohamed Salah',
-}, {
-  name: null,
-}, {
-  name: 'Darwin Núñez',
-}]);
+const collection = collect([
+  {
+    name: 'Mohamed Salah',
+  },
+  {
+    name: null,
+  },
+  {
+    name: 'Darwin Núñez',
+  },
+]);
 
 const filtered = collection.whereNull();
 
@@ -20,4 +24,4 @@ filtered.all();
 // ]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/whereNull.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/whereNull.js)

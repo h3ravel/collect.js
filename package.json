@@ -1,40 +1,40 @@
 {
-  "name": "collect.js",
-  "version": "4.36.1",
-  "description": "Convenient and dependency free wrapper for working with arrays and objects.",
-  "main": "dist/index.js",
+  "name": "@h3ravel/collect.js",
+  "version": "5.0.0",
+  "description": "Convenient and dependency free wrapper for working with arrays and objects (maintained).",
+  "main": "./dist/index.cjs",
   "typings": "index.d.ts",
+  "type": "module",
   "scripts": {
     "all": "npm run build && npm test && npm run eslint && npm run validate-version",
-    "pretest": "npm run transpile",
-    "test": "mocha test/tests.js",
-    "transpile": "rm -rf dist && babel src --quiet --out-dir dist",
+    "lint": "eslint . --ext .ts --ext .js",
+    "pretest": "pnpm run transpile",
+    "test": "vitest",
+    "barrel": "barrelize >/dev/null",
+    "coverage": "vitest --coverage",
+    "transpile": "tsdown --config-loader unconfig",
     "readme": "node bundler/bundle.js",
-    "bundle.development": "webpack-cli dist/index.js --output build/collect.js --mode development --output-library collect",
-    "bundle.production": "webpack-cli dist/index.js --output build/collect.min.js --mode production --output-library collect",
-    "build": "npm run transpile && npm run bundle.development && npm run bundle.production && npm run readme",
-    "eslint": "npm run eslint:fix",
-    "eslint:fix": "npm run eslint:js -- --fix && npm run eslint:md -- --fix",
+    "build": "pnpm run transpile && npm run readme",
+    "eslint": "pnpm eslint:fix",
+    "eslint:fix": "pnpm eslint:js -- --fix && npm run eslint:md -- --fix",
     "eslint:strict": "npm run eslint:js && npm run eslint:md",
-    "eslint:js": "eslint src/ test/",
-    "eslint:md": "eslint --ext md README.md docs/ --rule strict:off --rule no-undef:off --rule no-unused-vars:off --rule func-names:off --rule no-console:off --rule consistent-return:off --rule import/no-unresolved:off --rule import/extensions:off --parser-options sourceType:module",
-    "coverage": "npm run transpile && nyc mocha test/tests.js",
+    "eslint:js": "pnpm eslint src/ tests/",
+    "eslint:md": "pnpm eslint --ext md README.md docs/ --rule strict:off --rule no-undef:off --rule no-unused-vars:off --rule func-names:off --rule no-console:off --rule consistent-return:off --rule import/no-unresolved:off --rule import/extensions:off --parser-options sourceType:module",
     "reporter": "nyc report --reporter=html",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
     "validate-version": "",
-    "prepublishOnly": "npm run all"
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ]
+    "prepublishOnly": "pnpm run all",
+    "docs:preview": "vitepress preview docs"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ecrmnn/collect.js"
+    "url": "https://github.com/h3ravel/collect.js"
   },
   "keywords": [
+    "h3ravel",
+    "maintained",
+    "latest",
     "collections",
     "collection",
     "collect",
@@ -56,26 +56,47 @@
     "email": "danieleckermann@gmail.com",
     "url": "https://danieleckermann.com"
   },
+  "contributors": [
+    {
+      "name": "Daniel Eckermann",
+      "email": "danieleckermann@gmail.com",
+      "url": "https://danieleckermann.com"
+    },
+    {
+      "name": "3m1n3nc3",
+      "email": "hamzas.legacy@toneflix.net",
+      "url": "https://hamzas.legacy.toneflix.net"
+    }
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ecrmnn/collect.js/issues"
+    "url": "https://github.com/h3ravel/collect.js/issues"
   },
-  "homepage": "https://github.com/ecrmnn/collect.js",
+  "homepage": "https://github.com/h3ravel/collect.js",
   "devDependencies": {
-    "@babel/cli": "^7.17.10",
-    "@babel/core": "^7.18.2",
-    "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.18.2",
-    "benchmark": "^2.1.0",
-    "chai": "^4.1.2",
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb-base": "^13.2.0",
-    "eslint-plugin-import": "^2.18.0",
-    "eslint-plugin-markdown": "^1.0.0",
-    "hoax.js": "^1.0.0",
-    "mocha": "^3.5.2",
-    "nyc": "^11.0.2",
-    "webpack": "^4.36.1",
-    "webpack-cli": "^3.3.6"
+    "@eslint/js": "^9.39.2",
+    "@eslint/markdown": "^7.5.1",
+    "@types/node": "^25.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.44.0",
+    "@typescript-eslint/parser": "^8.44.0",
+    "barrelize": "^1.6.4",
+    "eslint": "^9.39.2",
+    "eslint-plugin-import": "^2.32.0",
+    "tsdown": "^0.16.0",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.50.0",
+    "vitepress": "2.0.0-alpha.15",
+    "vitest": "^4.0.16",
+    "vue": "^3.5.26"
+  },
+  "packageManager": "pnpm@10.18.2",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
   }
 }

@@ -32,4 +32,4 @@ const all = undotted.all();
 // }
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/undot.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/undot.js)

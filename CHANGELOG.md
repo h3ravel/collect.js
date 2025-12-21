@@ -1,26 +1,40 @@
+# 5.0.0
+
+## Features
+
+- Merge all open PR from [Parent Repo](https://github.com/ecrmnn/collect.js)
+- Rewrite library in Typescript and ES5
+
 # 4.19.0
 
 ## Bug fixes
 
 ## Methods
-#### ``flatten()``
-- Now properly flattens an object with multiple objects. [Issue](https://github.com/ecrmnn/collect.js/issues/240)
+
+#### `flatten()`
+
+- Now properly flattens an object with multiple objects. [Issue](https://github.com/h3ravel/collect.js/issues/240)
 
 # 4.18.8
 
 ## Bug fixes
 
 ## Methods
-#### ``shift()``
+
+#### `shift()`
+
 - Calling `shift()` on an empty collection returns null in all cases
 
-#### ``sortKeysDesc()``
+#### `sortKeysDesc()`
+
 - Now works correctly when collections is an object
 
-#### ``min()``
+#### `min()`
+
 - Passing an array of object where not every element contains the given key no longer causes an error
 
-#### ``max()``
+#### `max()`
+
 - Passing an array of object where not every element contains the given key no longer causes an error
 
 # 4.16.0
@@ -28,15 +42,19 @@
 ## Breaking changes
 
 ## Methods
-#### ``sortBy()``
-- Null values, ``null`` and ``undefined`` will be sorted last, like normal ``.sort()``
+
+#### `sortBy()`
+
+- Null values, `null` and `undefined` will be sorted last, like normal `.sort()`
 
 # 4.14.0
 
 ## Breaking changes
 
 ## Methods
-#### ``values()``
+
+#### `values()`
+
 - Reverted change in `4.13.0`. Values method are no longer recursive.
 
 # 4.14.0
@@ -44,7 +62,9 @@
 ## Breaking changes
 
 ## Methods
-#### ``where()``
+
+#### `where()`
+
 - This method now supports one, two or three arguments. This may cause unexpected output if you're using this function with one or two arguments earlier.
 
 # 4.13.0
@@ -52,7 +72,9 @@
 ## Breaking changes
 
 ## Methods
-#### ``values()``
+
+#### `values()`
+
 - Values now iterates the collection recursively and collects values. Results that previously would return an object may now return an array.
 
 # 4.12.0
@@ -60,8 +82,11 @@
 ## Breaking changes
 
 ## Collection
-#### ``collect()``
-- A collection instance made from an empty string is no longer recognized as an empty collection ``collect('')`` 
+
+#### `collect()`
+
+- A collection instance made from an empty string is no longer recognized as an empty collection `collect('')`
+
 ```js
 // Before 4.12.0
 collect('').isEmpty();
@@ -77,7 +102,9 @@ collect('').isEmpty();
 ## Breaking changes
 
 ## Methods
-#### ``concat()``
+
+#### `concat()`
+
 - Concat now returns a new collection instead of modifying the existing one
 
 # 4.3.0
@@ -85,65 +112,79 @@ collect('').isEmpty();
 ## Breaking changes
 
 ## Methods
-#### ``random()``
-- Previously ``random()`` and ``random(1)`` would return an array, while passing an integer >1 would return a collection object.
-- ``random(1)`` now returns a collection object
-- Changed ``random()`` according to https://github.com/ecrmnn/collect.js/issues/202
+
+#### `random()`
+
+- Previously `random()` and `random(1)` would return an array, while passing an integer >1 would return a collection object.
+- `random(1)` now returns a collection object
+- Changed `random()` according to https://github.com/h3ravel/collect.js/issues/202
 
 # 4.2.0
-- Added ``whenEmpty()`` method
-- Added ``whenNotEmpty()`` method
-- Added ``unlessEmpty()`` method
-- Added ``unlessNotEmpty()`` method
+
+- Added `whenEmpty()` method
+- Added `whenNotEmpty()` method
+- Added `unlessEmpty()` method
+- Added `unlessNotEmpty()` method
 
 # 4.1.0
 
 ## Breaking changes
 
 ## Methods
-#### ``flatMap()``
-- Changed ``flatMap()`` according to https://github.com/ecrmnn/collect.js/issues/195
+
+#### `flatMap()`
+
+- Changed `flatMap()` according to https://github.com/h3ravel/collect.js/issues/195
 
 # 4.0.1
+
 - Added build files so it's no longer required to use npm for installation
 
 # 4.0.0
 
 ## Breaking changes
-- ``chunk()``
-- ``count()``
-- ``dump()``
-- ``flatMap()``
-- ``has()``
-- ``keys()``
-- ``groupBy()``
-- ``partition()``
-- ``pluck()``
-- ``split()``
-- ``toArray()``
-- ``toJson()``
-- ``wrap()``
+
+- `chunk()`
+- `count()`
+- `dump()`
+- `flatMap()`
+- `has()`
+- `keys()`
+- `groupBy()`
+- `partition()`
+- `pluck()`
+- `split()`
+- `toArray()`
+- `toJson()`
+- `wrap()`
 
 ## Node.js
+
 Skipped Node 4 support
 
 ## Methods
-#### ``chunk()``
+
+#### `chunk()`
+
 - Returns a new collection of smaller collections of the given size.
-This is done because ``collect.js`` should give the same result as Laravel Collections.
+  This is done because `collect.js` should give the same result as Laravel Collections.
 - Also works when the collection is based on an object, a string, a number or boolean.
 
-#### ``combine()``
+#### `combine()`
+
 - Also works when the collection is based on a string
 - Also works when combining with a string or an object
 - Also works when combining with another collection
 
-#### ``count()``
+#### `count()`
+
 - Also works when the collection is based on an object
 - Return the number of keys in the object
 
-#### ``dump()``
-- Console logs the entire collection object (``this``) instead of only the items (``this.items``).
+#### `dump()`
+
+- Console logs the entire collection object (`this`) instead of only the items (`this.items`).
+
 ```js
 const collection = collect([
   { product: 'Desk', manufacturer: 'IKEA' },
@@ -171,11 +212,14 @@ collection.pluck('product', 'manufacturer').dump();
 //= > }
 ```
 
-#### ``except()``
+#### `except()`
+
 - Accepts an array or infinite number of arguments.
 
-#### ``first()``
+#### `first()`
+
 - Also works when the collection is based on an object.
+
 ```js
 const collection = collect({
   name: 'Darwin Núñez',
@@ -187,43 +231,55 @@ collection.first();
 //= > Darwin Núñez
 ```
 
-#### ``flatMap()``
+#### `flatMap()`
+
 - Version prior to 4.0.0 did not work as expected
 - Rewritten with new functionality
 - See readme for further details
 
-#### ``flip()``
+#### `flip()`
+
 - Also works when the collection is based on an object
 
-#### ``forget()``
+#### `forget()`
+
 - Also works when the collection is based on an object
 
-#### ``forPage()``
+#### `forPage()`
+
 - Also works when the collection is based on an object
 
-#### ``groupBy()``
+#### `groupBy()`
+
 - Objects that don't have the key that we're grouping by will be grouped into a group under the
-name of an empty string. This is changed from being grouped under ``undefined``.
+  name of an empty string. This is changed from being grouped under `undefined`.
 - Now returns a collection of collections instead of an array of objects.
-This is done because ``collect.js`` should give the same result as Laravel Collections.
+  This is done because `collect.js` should give the same result as Laravel Collections.
+
 ```js
 
 ```
-#### ``has()``
+
+#### `has()`
+
 - Accepts an array of keys to check
 - Is now a variadic function and therefore accepts infinite number of arguments (keys) to check
 - No longer checks if any object in the given array has the specified key.
-This is done because ``collect.js`` should give the same result as Laravel Collections.
+  This is done because `collect.js` should give the same result as Laravel Collections.
+
 ```js
 // Previously this would return true. It now returns false.
 
-const collection = collect([{
-  animal: 'unicorn',
-  ability: 'magical',
-}, {
-  animal: 'pig',
-  ability: 'filthy',
-}]);
+const collection = collect([
+  {
+    animal: 'unicorn',
+    ability: 'magical',
+  },
+  {
+    animal: 'pig',
+    ability: 'filthy',
+  },
+]);
 
 collection.has('ability');
 
@@ -231,17 +287,23 @@ collection.has('ability');
 //= > false (After 4.0.0)
 ```
 
-#### ``keyBy()``
-- Uses an empty string as the key instead of ``undefined`` when passed an invalid key
+#### `keyBy()`
 
-#### ``keys()``
-- Returns indexes as keys when based on an array. Indexes are mapped to ``Number``.
+- Uses an empty string as the key instead of `undefined` when passed an invalid key
+
+#### `keys()`
+
+- Returns indexes as keys when based on an array. Indexes are mapped to `Number`.
+
 ```js
-const collection = collect([{
-  name: 'Darwin Núñez',
-}, {
-  name: 'Roberto Firmino',
-}]);
+const collection = collect([
+  {
+    name: 'Darwin Núñez',
+  },
+  {
+    name: 'Roberto Firmino',
+  },
+]);
 const keys = collection.keys();
 
 // Prior to 4.0.0
@@ -249,10 +311,12 @@ const keys = collection.keys();
 
 // After 4.0.0
 //= > [0, 1]
-``` 
+```
 
-#### ``last()``
+#### `last()`
+
 - Also works when the collection is based on an object.
+
 ```js
 const collection = collect({
   name: 'Darwin Núñez',
@@ -264,19 +328,24 @@ collection.last();
 //= > Liverpool FC
 ```
 
-#### ``merge()``
+#### `merge()`
+
 - Can merge arrays and objects.
 - Also works when merging with a string.
 
-#### ``only()``
+#### `only()`
+
 - Accepts an array or infinite number of arguments.
 
-#### ``partition()``
+#### `partition()`
+
 - Returns a collection of collections with the results instead of an array
 
-#### ``pluck()``
-- Returns ``null`` as the value instead of ``undefined``
-- Returns ``null`` when an item does not contain the specified key.
+#### `pluck()`
+
+- Returns `null` as the value instead of `undefined`
+- Returns `null` when an item does not contain the specified key.
+
 ```js
 const collection = collect([
   { product: 'Desk', manufacturer: 'IKEA' },
@@ -297,8 +366,10 @@ manufacturers.all();
 
 //= > ['IKEA', 'Herman Miller', 'IKEA', null]
 ```
-- Objects that don't have the key that we're plucking by will get an empty string as its key. 
-This is changed from being ``undefined``.
+
+- Objects that don't have the key that we're plucking by will get an empty string as its key.
+  This is changed from being `undefined`.
+
 ```js
 const collection = collect([
   { product: 'Desk', manufacturer: 'IKEA' },
@@ -318,23 +389,30 @@ pluck.all();
 //= > }
 ```
 
-#### ``pop()``
+#### `pop()`
+
 - Also works when collection is based on an object
 
-#### ``push()``
-- Accepts spread/rest operator ``collection.push(...values)``
+#### `push()`
 
-#### ``random()``
+- Accepts spread/rest operator `collection.push(...values)`
+
+#### `random()`
+
 - Also works when collection is based on an object
 
-#### ``shift()``
+#### `shift()`
+
 - Also works when collection is based on an object
 
-#### ``shuffle()``
+#### `shuffle()`
+
 - Also works when collection is based on an object
 
-#### ``split()``
+#### `split()`
+
 - Splits the collection into the given number of collections
+
 ```js
 const collection = collect([1, 2, 3, 4, 5]);
 
@@ -359,20 +437,25 @@ collection.split(2).dump();
 //= > }
 ```
 
-#### ``take()``
+#### `take()`
+
 - Also works when collection is based on an object
 
-#### ``toArray()``
-- Now works recursively like Laravel collections ``toArray()`` method
-- More information: https://github.com/ecrmnn/collect.js/issues/138
+#### `toArray()`
 
-#### ``toJson()``
-- Now works recursively like Laravel collections ``toArray()`` method
-- More information: https://github.com/ecrmnn/collect.js/issues/138
+- Now works recursively like Laravel collections `toArray()` method
+- More information: https://github.com/h3ravel/collect.js/issues/138
 
-#### ``wrap()``
+#### `toJson()`
+
+- Now works recursively like Laravel collections `toArray()` method
+- More information: https://github.com/h3ravel/collect.js/issues/138
+
+#### `wrap()`
+
 - Now wraps objects correctly. The key/values are places directly on the collection. Previously objects were wrapped in
- an array.
+  an array.
 
 ## Misc
-- Added ``CHANGELOG.md``
+
+- Added `CHANGELOG.md`

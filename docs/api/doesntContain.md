@@ -5,7 +5,7 @@ The `doesntContain` method determines whether the collection does not contain a 
 ```js
 const collection = collect([1, 2, 3, 4, 5]);
 
-collection.doesntContain(value => value < 5);
+collection.doesntContain((value) => value < 5);
 
 // false
 ```
@@ -44,4 +44,4 @@ collection.doesntContain('name', 'Darwin Núñez');
 // true
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/doesntContain.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/doesntContain.js)

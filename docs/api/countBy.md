@@ -25,7 +25,7 @@ const collection = collect([
   'roberto.firmino@gmail.com',
 ]);
 
-const counted = collection.countBy(email => email.split('@')[1]);
+const counted = collection.countBy((email) => email.split('@')[1]);
 
 counted.all();
 
@@ -35,4 +35,4 @@ counted.all();
 // }
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/countBy.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/countBy.js)

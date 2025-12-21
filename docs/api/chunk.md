@@ -12,4 +12,4 @@ chunks.all();
 // [[1, 2, 3, 4], [5, 6, 7]]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/chunk.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/chunk.js)

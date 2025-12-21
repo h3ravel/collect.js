@@ -5,7 +5,7 @@ The `skipWhile` method skips items while the given callback returns `true` and t
 ```js
 const collection = collect([1, 2, 3, 4]);
 
-const subset = collection.skipWhile(item => item <= 3);
+const subset = collection.skipWhile((item) => item <= 3);
 
 subset.all();
 
@@ -26,4 +26,4 @@ subset.all();
 // [2, 2, 3, 3, 4, 4]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/skipWhile.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/skipWhile.js)

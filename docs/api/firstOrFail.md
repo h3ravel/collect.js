@@ -3,13 +3,13 @@
 The firstOrFail method returns the first element in the collection, or throws an error if there are no elements:
 
 ```js
-collect([1, 2, 3, 4]).firstOrFail(item => item > 1);
+collect([1, 2, 3, 4]).firstOrFail((item) => item > 1);
 
 // 2
 ```
 
 ```js
-collect([1, 2, 3, 4]).firstOrFail(item => item > 4);
+collect([1, 2, 3, 4]).firstOrFail((item) => item > 4);
 
 // Error ('Item not found.') is thrown.
 ```
@@ -43,4 +43,4 @@ collection.firstOrFail('product', '=', 'Desk');
 // { product: 'Desk', price: 200, discounted: true }
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/firstOrFail.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/firstOrFail.js)

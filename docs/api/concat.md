@@ -19,4 +19,4 @@ concatenated.all();
 // [1, 2, 3, 'a', 'b', 'c', 'Mohamed Salah', 11]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/concat.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/concat.js)

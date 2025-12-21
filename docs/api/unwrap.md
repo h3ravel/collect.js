@@ -10,4 +10,4 @@ collect().unwrap(collection);
 // [1, 2, 3]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/unwrap.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/unwrap.js)

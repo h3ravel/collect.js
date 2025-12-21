@@ -41,9 +41,9 @@ const collection = collect([
   },
 ]);
 
-collection.avg(book => book.pages);
+collection.avg((book) => book.pages);
 
 // 636
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/avg.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/avg.js)

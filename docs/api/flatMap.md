@@ -14,11 +14,11 @@ const collection = collect([
   },
 ]);
 
-const flatMapped = collection.flatMap(value => value.name.toUpperCase());
+const flatMapped = collection.flatMap((value) => value.name.toUpperCase());
 
 flatMapped.all();
 
 // ['DARWIN NÚÑEZ', 'MOHAMED SALAH']
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/flatMap.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/flatMap.js)

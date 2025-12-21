@@ -103,4 +103,4 @@ filtered.all();
 // ]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/where.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/where.js)

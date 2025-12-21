@@ -5,7 +5,7 @@ The `takeUntil` method returns items in the collection until the given callback 
 ```js
 const collection = collect([1, 2, 3, 4]);
 
-const subset = collection.takeUntil(item => item >= 3);
+const subset = collection.takeUntil((item) => item >= 3);
 
 subset.all();
 
@@ -26,4 +26,4 @@ subset.all();
 // [1, 2]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/takeUntil.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/takeUntil.js)

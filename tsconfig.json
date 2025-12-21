@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist-old",
+    "paths": {
+      "@h3ravel/collection": ["src/index.js"]
+    },
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "target": "es2022",
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "strict": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src", "tests/collection.spec.ts", "tests/general.spec.ts"],
+  "exclude": ["dist-old", "dist", "node_modules"]
+}

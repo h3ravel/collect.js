@@ -5,7 +5,7 @@ The `skipUntil` method skips items until the given callback returns `true` and t
 ```js
 const collection = collect([1, 2, 3, 4]);
 
-const subset = collection.skipUntil(item => item >= 3);
+const subset = collection.skipUntil((item) => item >= 3);
 
 subset.all();
 
@@ -24,4 +24,4 @@ subset.all();
 // [3, 4]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/skipUntil.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/skipUntil.js)

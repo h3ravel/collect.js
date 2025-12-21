@@ -20,4 +20,4 @@ diff.all();
 // { a: 'a', c: 'c' }
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/diffKeys.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/diffKeys.js)

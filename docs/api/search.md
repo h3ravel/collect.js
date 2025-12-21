@@ -26,4 +26,4 @@ collection.search((item, key) => item > 5);
 // 2
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/search.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/search.js)

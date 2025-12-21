@@ -12,4 +12,4 @@ intersect.all();
 // [1, 2, 3]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/intersect.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/intersect.js)

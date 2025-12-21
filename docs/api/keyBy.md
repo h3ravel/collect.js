@@ -37,7 +37,7 @@ keyed.all();
 You may also pass a callback to the method. The callback should return the value to key the collection by:
 
 ```js
-const upperCased = collection.keyBy(item => item.manufacturer.toUpperCase());
+const upperCased = collection.keyBy((item) => item.manufacturer.toUpperCase());
 
 upperCased.all();
 
@@ -53,4 +53,4 @@ upperCased.all();
 // }
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/keyBy.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/keyBy.js)

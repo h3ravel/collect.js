@@ -22,4 +22,4 @@ slice.all();
 // [5, 6]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/slice.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/slice.js)

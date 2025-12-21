@@ -3,7 +3,7 @@
 The first method returns the first element in the collection that passes a given truth test:
 
 ```js
-collect([1, 2, 3, 4]).first(item => item > 1);
+collect([1, 2, 3, 4]).first((item) => item > 1);
 
 // 2
 ```
@@ -16,4 +16,4 @@ collect([1, 2, 3, 4]).first();
 // 1
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/first.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/first.js)

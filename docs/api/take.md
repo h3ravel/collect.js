@@ -13,4 +13,4 @@ chunk.all();
 // [0, 1, 2]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/take.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/take.js)

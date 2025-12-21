@@ -1,15 +1,16 @@
-# <img src="https://raw.githubusercontent.com/ecrmnn/collect.js/master/collectjs.jpg" alt="collect.js">
+# <img src="https://raw.githubusercontent.com/h3ravel/collect.js/main/collectjs.jpg" alt="collect.js">
 
-> Convenient and dependency free wrapper for working with arrays and objects
+> Convenient and dependency free wrapper for working with arrays and objects, completely rewritten in Typescript and actively maintained.
 
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fecrmnn%2Fcollect.js%2Fbadge%3Fref%3Dmaster&style=flat-square&label=build)](https://github.com/ecrmnn/collect.js/actions)
-[![npm version](https://img.shields.io/npm/v/collect.js.svg?style=flat-square)](http://badge.fury.io/js/collect.js)
-[![npm downloads](https://img.shields.io/npm/dm/collect.js.svg?style=flat-square)](http://badge.fury.io/js/collect.js)
-[![npm license](https://img.shields.io/npm/l/collect.js.svg?style=flat-square)](http://badge.fury.io/js/collect.js)
+
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fh3ravel%2Fcollect.js%2Fbadge%3Fref%3Dmainstyle=flat-square&label=build)](https://github.com/h3ravel/collect.js/actions)
+[![npm version](https://img.shields.io/npm/v/@h3ravel/collect.js.svg?style=flat-square)](http://badge.fury.io/js/@h3ravel/collect.js)
+[![npm downloads](https://img.shields.io/npm/dm/@h3ravel/collect.js.svg?style=flat-square)](http://badge.fury.io/js/@h3ravel/collect.js)
+[![npm license](https://img.shields.io/npm/l/@h3ravel/collect.js.svg?style=flat-square)](http://badge.fury.io/js/@h3ravel/collect.js)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-[![dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg?style=flat-square)](https://github.com/ecrmnn/collect.js/blob/master/package.json)
-[![eslint](https://img.shields.io/badge/code_style-airbnb-blue.svg?style=flat-square)](https://github.com/airbnb/javascript)
-[![cdnjs version](https://img.shields.io/cdnjs/v/collect.js.svg?style=flat-square)](https://cdnjs.com/libraries/collect.js)
+[![dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg?style=flat-square)](https://github.com/h3ravel/collect.js/blob/main/package.json)
+[![cdnjs version](https://img.shields.io/cdnjs/v/@h3ravel/collect.js.svg?style=flat-square)](https://cdnjs.com/libraries/@h3ravel/collect.js)
+[![Tests][tei]][tel]
 
 
 ### Installation
@@ -17,33 +18,41 @@
 #### NPM
 
 ```bash
-npm install collect.js --save
+npm install @h3ravel/collect.js --save
+```
+
+#### PNPM
+
+```bash
+pnpm add @h3ravel/collect.js
 ```
 
 #### Yarn
 
 ```bash
-yarn add collect.js
+yarn add @h3ravel/collect.js
 ```
 
 #### From CDN
 
-1. Visit https://cdnjs.com/libraries/collect.js
+1. Visit https://cdnjs.com/libraries/@h3ravel/collect.js
 2. Add CDN link to your site with `<script>`
 
 #### Using build / minified version
 
-1. Download [`collect.min.js`](https://github.com/ecrmnn/collect.js/blob/master/build/collect.min.js)
+1. Download [`collect.min.js`](https://github.com/h3ravel/collect.js/blob/main/build/collect.min.js)
 2. Add to your site with `<script>`
 
 ### Tip
 
 Using Laravel as your backend? Collect.js offers an (almost) identical api to [Laravel Collections](https://laravel.com/docs/master/collections). [See differences](#strictness-and-comparisons).
 
+
 ### API
 
 All available methods
 
+- [add](#add)
 - [all](#all)
 - [average](#average)
 - [avg](#avg)
@@ -62,6 +71,7 @@ All available methods
 - [diffKeys](#diffkeys)
 - [diffUsing](#diffusing)
 - [doesntContain](#doesntcontain)
+- [dot](#dot)
 - [dump](#dump)
 - [duplicates](#duplicates)
 - [each](#each)
@@ -132,6 +142,7 @@ All available methods
 - [sort](#sort)
 - [sortBy](#sortby)
 - [sortByDesc](#sortbydesc)
+- [sortByMany](#sortbymany)
 - [sortDesc](#sortdesc)
 - [sortKeys](#sortkeys)
 - [sortKeysDesc](#sortkeysdesc)
@@ -181,6 +192,17 @@ All comparisons in `collect.js` are done using strict equality. Using loose equa
 - ~~`whereInStrict`~~ use `whereIn()`
 - ~~`whereNotInStrict`~~ use `whereNotIn()`
 
+#### `add()`
+
+The add method adds a single item to the collection.
+
+```js
+collect([1, 2, 3, 4]).add(5);
+
+// [1, 2, 3, 4, 5]
+```
+
+
 #### `all()`
 
 The all method returns the underlying array or object represented by the collection:
@@ -204,10 +226,10 @@ collect({
 ```
 
 
-
 #### `average()`
 
-Alias for the [`avg()`](#avg) method
+Alias for the [`avg()`](/api/avg) method
+
 
 #### `avg()`
 
@@ -252,10 +274,11 @@ const collection = collect([
   },
 ]);
 
-collection.avg(book => book.pages);
+collection.avg((book) => book.pages);
 
 // 636
 ```
+
 
 #### `chunk()`
 
@@ -270,6 +293,7 @@ chunks.all();
 
 // [[1, 2, 3, 4], [5, 6, 7]]
 ```
+
 
 #### `collapse()`
 
@@ -286,7 +310,11 @@ collapsed.all();
 ```
 
 ```js
-const collection = collect([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
+const collection = collect([
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+]);
 
 const collapsed = collection.collapse();
 
@@ -294,6 +322,7 @@ collapsed.all();
 
 // [1, 2, 3, 4, 5, 6, 7, 8, 9]
 ```
+
 
 #### `combine()`
 
@@ -311,6 +340,7 @@ combine.all();
 //   number: 11
 // }
 ```
+
 
 #### `concat()`
 
@@ -332,6 +362,7 @@ concatenated.all();
 
 // [1, 2, 3, 'a', 'b', 'c', 'Mohamed Salah', 11]
 ```
+
 
 #### `contains()`
 
@@ -384,6 +415,7 @@ collection.contains((value, key) => value > 5);
 // false
 ```
 
+
 #### `containsOneItem()`
 
 The containsOneItem method returns true if the collection contains exactly one item; otherwise, false is returned:
@@ -427,6 +459,7 @@ collection.count();
 // 4
 ```
 
+
 #### `countBy()`
 
 The countBy method counts the occurences of values in the collection. By default, the method counts the occurrences of every element:
@@ -454,7 +487,7 @@ const collection = collect([
   'roberto.firmino@gmail.com',
 ]);
 
-const counted = collection.countBy(email => email.split('@')[1]);
+const counted = collection.countBy((email) => email.split('@')[1]);
 
 counted.all();
 
@@ -484,6 +517,7 @@ joined.all();
 // ]
 ```
 
+
 #### `dd()`
 
 The dd method will `console.log` the collection and exit the current process:
@@ -494,6 +528,7 @@ const collection = collect([1, 2, 3]).dd();
 // Collection { items: [ 1, 2, 3 ] }
 // (Exits node.js process)
 ```
+
 
 #### `diff()`
 
@@ -508,6 +543,7 @@ diff.all();
 
 // [4, 5]
 ```
+
 
 #### `diffAssoc()`
 
@@ -533,6 +569,7 @@ diff.all();
 // { color: 'orange', remain: 6 };
 ```
 
+
 #### `diffKeys()`
 
 The diffKeys method compares the collection against another collection or a plain object based on its keys. This method will return the key / value pairs in the original collection that are not present in the given collection:
@@ -554,6 +591,7 @@ diff.all();
 
 // { a: 'a', c: 'c' }
 ```
+
 
 #### `diffUsing()`
 
@@ -587,7 +625,7 @@ The `doesntContain` method determines whether the collection does not contain a 
 ```js
 const collection = collect([1, 2, 3, 4, 5]);
 
-collection.doesntContain(value => value < 5);
+collection.doesntContain((value) => value < 5);
 
 // false
 ```
@@ -627,6 +665,33 @@ collection.doesntContain('name', 'Darwin Núñez');
 ```
 
 
+#### `dot()`
+
+The dot method allows accessing objects using the dot notation.
+
+```js
+collect({
+  name: 'Taylor',
+  meta: {
+    foo: 'bar',
+    baz: ['boom', 'boom', 'boom'],
+    bam: {
+      boom: 'bip',
+    },
+  },
+})
+  .dot()
+  .all();
+
+// {
+//   name: 'Taylor',
+//   'meta.foo': 'bar',
+//   'meta.baz': ['boom', 'boom', 'boom'],
+//   'meta.bam.boom': 'bip',
+// }
+```
+
+
 #### `dump()`
 
 The dump method outputs the results at that moment and then continues processing:
@@ -634,12 +699,13 @@ The dump method outputs the results at that moment and then continues processing
 ```js
 collect([1, 2, 3, 4])
   .dump()
-  .map(item => item * 2)
+  .map((item) => item * 2)
   .dump();
 
 // Collection { items: [ 1, 2, 3, 4 ] }
 // Collection { items: [ 2, 4, 6, 8 ] }
 ```
+
 
 #### `duplicates()`
 
@@ -654,6 +720,7 @@ duplicates.all();
 
 // { 2: 'a', 4: 'b' }
 ```
+
 
 #### `each()`
 
@@ -691,12 +758,16 @@ collection.each((item) => {
 // 7
 ```
 
+
 #### `eachSpread()`
 
 The eachSpread method iterates over the collection's items, passing each nested item value into the given callback:
 
 ```js
-const collection = collect([['John Doe', 35], ['Jane Doe', 33]]);
+const collection = collect([
+  ['John Doe', 35],
+  ['Jane Doe', 33],
+]);
 
 collection.eachSpread((name, age) => {
   //
@@ -709,6 +780,7 @@ You may stop iterating through the items by returning false from the callback:
 collection.eachSpread((name, age) => false);
 ```
 
+
 #### `every()`
 
 The every method may be used to verify that all elements of a collection pass a given truth test:
@@ -718,6 +790,7 @@ collect([1, 2, 3, 4]).every((value, key) => value > 2);
 
 // false
 ```
+
 
 #### `except()`
 
@@ -738,14 +811,13 @@ filtered.all();
 ```
 
 ```js
-collect([1, 2, 3, 4])
-  .except([2, 12])
-  .all();
+collect([1, 2, 3, 4]).except([2, 12]).all();
 
 // [1, 3, 4]
 ```
 
 > For the inverse of `except`, see the `only` method.
+
 
 #### `filter()`
 
@@ -791,12 +863,13 @@ filtered.all();
 
 > For the inverse of `filter`, see the `reject` method.
 
+
 #### `first()`
 
 The first method returns the first element in the collection that passes a given truth test:
 
 ```js
-collect([1, 2, 3, 4]).first(item => item > 1);
+collect([1, 2, 3, 4]).first((item) => item > 1);
 
 // 2
 ```
@@ -809,18 +882,19 @@ collect([1, 2, 3, 4]).first();
 // 1
 ```
 
+
 #### `firstOrFail()`
 
 The firstOrFail method returns the first element in the collection, or throws an error if there are no elements:
 
 ```js
-collect([1, 2, 3, 4]).firstOrFail(item => item > 1);
+collect([1, 2, 3, 4]).firstOrFail((item) => item > 1);
 
 // 2
 ```
 
 ```js
-collect([1, 2, 3, 4]).firstOrFail(item => item > 4);
+collect([1, 2, 3, 4]).firstOrFail((item) => item > 4);
 
 // Error ('Item not found.') is thrown.
 ```
@@ -872,6 +946,7 @@ collection.firstWhere('name', 'Linda');
 // { name: 'Linda', age: 14 }
 ```
 
+
 #### `flatMap()`
 
 The flatMap method iterates through the collection and passes each value to the given callback. The callback is free to modify the item and return it, thus forming a new collection of modified items. Then, the array is flattened by a level:
@@ -888,7 +963,7 @@ const collection = collect([
   },
 ]);
 
-const flatMapped = collection.flatMap(value => value.name.toUpperCase());
+const flatMapped = collection.flatMap((value) => value.name.toUpperCase());
 
 flatMapped.all();
 
@@ -979,6 +1054,7 @@ forPage.all();
 // [4, 5, 6]
 ```
 
+
 #### `forget()`
 
 The forget method removes an item from the collection by its key:
@@ -1052,6 +1128,7 @@ collection.get('middlename', () => 'default-value');
 
 // default-value
 ```
+
 
 #### `groupBy()`
 
@@ -1127,7 +1204,9 @@ const collection = collect([
   },
 ]);
 
-const grouped = collection.groupBy((item, key) => item.manufacturer.substring(0, 3));
+const grouped = collection.groupBy((item, key) =>
+  item.manufacturer.substring(0, 3)
+);
 
 grouped.all();
 
@@ -1161,6 +1240,7 @@ grouped.all();
 // }
 ```
 
+
 #### `has()`
 
 The has method determines if one or more keys exists in the collection:
@@ -1183,6 +1263,7 @@ collection.has(['animal', 'ability', 'name']);
 
 // false
 ```
+
 
 #### `implode()`
 
@@ -1217,6 +1298,7 @@ collect([1, 2, 3, 4, 5]).implode('-');
 // 1-2-3-4-5
 ```
 
+
 #### `intersect()`
 
 The intersect method removes any values from the original collection that are not present in the given `array` or `collection`. The resulting collection will preserve the original collection's keys:
@@ -1230,6 +1312,7 @@ intersect.all();
 
 // [1, 2, 3]
 ```
+
 
 #### `intersectByKeys()`
 
@@ -1264,6 +1347,7 @@ intersect.all();
 // [1, 2, 3]
 ```
 
+
 #### `isEmpty()`
 
 The isEmpty method returns true if the collection is empty; otherwise, false is returned:
@@ -1278,6 +1362,7 @@ collect([]).isEmpty();
 collect({}).isEmpty();
 // true
 ```
+
 
 #### `isNotEmpty()`
 
@@ -1296,6 +1381,7 @@ collect([]).isNotEmpty();
 collect({}).isNotEmpty();
 // false
 ```
+
 
 #### `join()`
 
@@ -1317,6 +1403,7 @@ collect(['a']).join(', ', ' and ');
 collect([]).join(', ', ' and ');
 // ''
 ```
+
 
 #### `keyBy()`
 
@@ -1357,7 +1444,7 @@ keyed.all();
 You may also pass a callback to the method. The callback should return the value to key the collection by:
 
 ```js
-const upperCased = collection.keyBy(item => item.manufacturer.toUpperCase());
+const upperCased = collection.keyBy((item) => item.manufacturer.toUpperCase());
 
 upperCased.all();
 
@@ -1372,6 +1459,7 @@ upperCased.all();
 //   },
 // }
 ```
+
 
 #### `keys()`
 
@@ -1390,6 +1478,7 @@ keys = collection.keys();
 // ['club', 'nickname']
 ```
 
+
 #### `last()`
 
 The last method returns the last element in the collection that passes a given truth test:
@@ -1397,7 +1486,7 @@ The last method returns the last element in the collection that passes a given t
 ```js
 const collection = collect([1, 2, 3]);
 
-const last = collection.last(item => item > 1);
+const last = collection.last((item) => item > 1);
 
 // 3
 ```
@@ -1410,13 +1499,14 @@ collect([1, 2, 3, 4]).last();
 // 4
 ```
 
+
 #### `macro()`
 
 The macro method lets you register custom methods
 
 ```js
 collect().macro('uppercase', function () {
-  return this.map(item => item.toUpperCase());
+  return this.map((item) => item.toUpperCase());
 });
 
 const collection = collect(['a', 'b', 'c']);
@@ -1430,11 +1520,13 @@ collection.all();
 
 > Note that the `macro` method returns `undefined`, and therefore it is not possible to use it within a chain of methods.
 
+
 #### `make()`
 
 The make method creates a new collection instance.
 
 > This is only added to adhere to the Laravel collection API, when using Collect.js it's recommended to use `collect()` directly when creating a new collection.
+
 
 #### `map()`
 
@@ -1443,7 +1535,7 @@ The map method iterates through the collection and passes each value to the give
 ```js
 const collection = collect([1, 2, 3, 4, 5]);
 
-const multiplied = collection.map(item => item * 2);
+const multiplied = collection.map((item) => item * 2);
 
 multiplied.all();
 
@@ -1451,6 +1543,7 @@ multiplied.all();
 ```
 
 > Like most other collection methods, `map` returns a new collection instance; it does not modify the collection it is called on. If you want to transform the original collection, use the `transform` method.
+
 
 #### `mapInto()`
 
@@ -1461,10 +1554,7 @@ const Player = function (name) {
   this.name = name;
 };
 
-const collection = collect([
-  'Roberto Firmino',
-  'Darwin Núñez',
-]);
+const collection = collect(['Roberto Firmino', 'Darwin Núñez']);
 
 const players = collection.mapInto(Player);
 
@@ -1494,6 +1584,7 @@ sequence.all();
 // [1, 5, 9, 13, 17]
 ```
 
+
 #### `mapToDictionary()`
 
 Run a dictionary map over the items.
@@ -1507,7 +1598,7 @@ const collection = collect([
   { id: 4, name: 'b' },
 ]);
 
-const groups = collection.mapToDictionary(item => [item.name, item.id]);
+const groups = collection.mapToDictionary((item) => [item.name, item.id]);
 
 groups.all();
 
@@ -1517,6 +1608,7 @@ groups.all();
 //   c: [3],
 // }
 ```
+
 
 #### `mapToGroups()`
 
@@ -1539,6 +1631,7 @@ const groups = collection.mapToGroups((item, key) => [item.name, item.id]);
 // }
 ```
 
+
 #### `mapWithKeys()`
 
 The mapWithKeys method iterates through the collection and passes each value to the given callback. The callback should return an array where the first element represents the key and the second element represents the value pair:
@@ -1557,7 +1650,7 @@ const collection = collect([
   },
 ]);
 
-const keyed = collection.mapWithKeys(item => [item.email, item.name]);
+const keyed = collection.mapWithKeys((item) => [item.email, item.name]);
 
 keyed.all();
 
@@ -1566,6 +1659,7 @@ keyed.all();
 //   'jane@example.com': 'Jane',
 // }
 ```
+
 
 #### `max()`
 
@@ -1598,6 +1692,7 @@ collect([-1, -2345, 12, 11, 3]).max();
 // 12
 ```
 
+
 #### `median()`
 
 The median method returns the median value of a given key:
@@ -1626,6 +1721,7 @@ collect([
 
 // 1.5
 ```
+
 
 #### `merge()`
 
@@ -1659,6 +1755,7 @@ merged.all();
 // ['Unicorn', 'Rainbow', 'Sunshine', 'Rainbow']
 ```
 
+
 #### `mergeRecursive()`
 
 The mergeRecursive method merges the given array or collection recursively with the original collection. If a string key in the given items matches a string key in the original collection, then the values for these keys are merged together into an array, and this is done recursively:
@@ -1683,6 +1780,7 @@ merged.all();
 //   discount: false,
 // }
 ```
+
 
 #### `min()`
 
@@ -1711,6 +1809,7 @@ collect([1, 2, 3, 4, 5]).min();
 
 // 1
 ```
+
 
 #### `mode()`
 
@@ -1741,6 +1840,7 @@ collect([
 // [1]
 ```
 
+
 #### `nth()`
 
 The nth method creates a new collection consisting of every n-th element:
@@ -1754,6 +1854,7 @@ nth.all();
 
 // ['a', 'e']
 ```
+
 
 #### `only()`
 
@@ -1775,14 +1876,13 @@ filtered.all();
 ```
 
 ```js
-collect([1, 2, 3, 4])
-  .only([2, 12])
-  .all();
+collect([1, 2, 3, 4]).only([2, 12]).all();
 
 // [2]
 ```
 
 > For the inverse of `only`, see the `except` method.
+
 
 #### `pad()`
 
@@ -1807,6 +1907,7 @@ filtered.all();
 // [0, 0, 'A', 'B', 'C']
 ```
 
+
 #### `partition()`
 
 The partition method may be combined with destructuring to separate elements that pass a given truth test from those that do not:
@@ -1814,8 +1915,9 @@ The partition method may be combined with destructuring to separate elements tha
 ```js
 const collection = collect([1, 2, 3, 4, 5, 6]);
 
-const [underThree, overThree] = collection.partition(i => i < 3);
+const [underThree, overThree] = collection.partition((i) => i < 3);
 ```
+
 
 #### `pipe()`
 
@@ -1824,10 +1926,11 @@ The pipe method passes the collection to the given callback and returns the resu
 ```js
 const collection = collect([1, 2, 3]);
 
-const piped = collection.pipe(items => items.sum());
+const piped = collection.pipe((items) => items.sum());
 
 // 6
 ```
+
 
 #### `pluck()`
 
@@ -1929,6 +2032,7 @@ plucked.all();
 // ]
 ```
 
+
 #### `pop()`
 
 The pop method removes and returns the last item from the collection:
@@ -1946,6 +2050,7 @@ collection.all();
 ```
 
 You may provide number of items to pop. This will return the popped items in a new collection:
+
 ```js
 const collection = collect([1, 2, 3, 4, 5]);
 
@@ -1957,6 +2062,7 @@ collection.all();
 
 // => [1, 2, 3]
 ```
+
 
 #### `prepend()`
 
@@ -1991,6 +2097,7 @@ collection.all();
 // }
 ```
 
+
 #### `pull()`
 
 The pull method removes and returns an item from the collection by its key:
@@ -2010,6 +2117,7 @@ collection.all();
 // { firstname: 'Michael' }
 ```
 
+
 #### `push()`
 
 The push method appends an item to the end of the collection:
@@ -2024,6 +2132,7 @@ collection.all();
 // [1, 2, 3, 4, 5]
 ```
 
+
 #### `put()`
 
 The put method sets the given key and value in the collection:
@@ -2037,6 +2146,7 @@ collection.all();
 
 // ['JavaScript', 'Python', 'Ruby']
 ```
+
 
 #### `random()`
 
@@ -2066,6 +2176,7 @@ oneRandom.all();
 // [3]
 ```
 
+
 #### `reduce()`
 
 The reduce method reduces the collection to a single value, passing the result of each iteration into the subsequent iteration:
@@ -2086,6 +2197,7 @@ const total = collection.reduce((carry, item) => carry + item, 4);
 // 10
 ```
 
+
 #### `reject()`
 
 The reject method filters the collection using the given callback. The callback should return true if the item should be removed from the resulting collection:
@@ -2093,12 +2205,13 @@ The reject method filters the collection using the given callback. The callback 
 ```js
 const collection = collect([1, 2, 3, 4]);
 
-const filtered = collection.reject(value => value > 2);
+const filtered = collection.reject((value) => value > 2);
 
 // [1, 2]
 ```
 
 > For the inverse of the `reject` method, see the `filter` method.
+
 
 #### `replace()`
 
@@ -2122,6 +2235,7 @@ replaced.all();
 // }
 ```
 
+
 #### `replaceRecursive()`
 
 This method works like replace, but it will recurse into arrays and apply the same replacement process to the inner values:
@@ -2130,11 +2244,7 @@ This method works like replace, but it will recurse into arrays and apply the sa
 const collection = collect([
   'Matip',
   'van Dijk',
-  [
-    'Núñez',
-    'Firmino',
-    'Salah',
-  ],
+  ['Núñez', 'Firmino', 'Salah'],
 ]);
 
 const replaced = collection.replaceRecursive({
@@ -2166,6 +2276,7 @@ reversed.all();
 // [5, 4, 3, 2, 1]
 ```
 
+
 #### `search()`
 
 The search method searches the collection for the given value and returns its key if found. If the item is not found, false is returned.
@@ -2194,6 +2305,7 @@ collection.search((item, key) => item > 5);
 // 2
 ```
 
+
 #### `shift()`
 
 The shift method removes and returns the first item from the collection:
@@ -2211,6 +2323,7 @@ collection.all();
 ```
 
 You may provide number of items to shift. This will return the shifted items in a new collection:
+
 ```js
 const collection = collect([1, 2, 3, 4, 5]);
 
@@ -2222,6 +2335,7 @@ collection.all();
 
 // => [3, 4, 5]
 ```
+
 
 #### `shuffle()`
 
@@ -2236,6 +2350,7 @@ shuffled.all();
 
 // [3, 5, 1, 2, 4] (generated randomly)
 ```
+
 
 #### `skip()`
 
@@ -2271,7 +2386,7 @@ The `skipUntil` method skips items until the given callback returns `true` and t
 ```js
 const collection = collect([1, 2, 3, 4]);
 
-const subset = collection.skipUntil(item => item >= 3);
+const subset = collection.skipUntil((item) => item >= 3);
 
 subset.all();
 
@@ -2298,7 +2413,7 @@ The `skipWhile` method skips items while the given callback returns `true` and t
 ```js
 const collection = collect([1, 2, 3, 4]);
 
-const subset = collection.skipWhile(item => item <= 3);
+const subset = collection.skipWhile((item) => item <= 3);
 
 subset.all();
 
@@ -2344,12 +2459,13 @@ slice.all();
 // [5, 6]
 ```
 
+
 #### `sole()`
 
 The sole method returns the first element in the collection that passes a given truth test, but only if the truth test matches exactly one element:
 
 ```js
-collect([1, 2, 3, 4]).sole(item => item === 1);
+collect([1, 2, 3, 4]).sole((item) => item === 1);
 
 // 1
 ```
@@ -2357,7 +2473,7 @@ collect([1, 2, 3, 4]).sole(item => item === 1);
 If there are no elements in the collection that should be returned by the sole method, then an error will be thrown:
 
 ```js
-collect([1, 2, 3, 4]).sole(item => item > 4);
+collect([1, 2, 3, 4]).sole((item) => item > 4);
 
 // Error ('Item not found.') is thrown.
 ```
@@ -2388,7 +2504,8 @@ collection.sole('product', '=', 'Desk');
 
 #### `some()`
 
-Alias for the [contains](#contains) method.
+Alias for the [contains](/api/contains) method.
+
 
 #### `sort()`
 
@@ -2418,6 +2535,7 @@ sorted.all();
 
 > If you need to sort a collection of nested arrays or objects, see the `sortBy` and `sortByDesc` methods.
 
+
 #### `sortBy()`
 
 The sortBy method sorts the collection by the given key. The sorted collection keeps the original array keys, so in this example we'll use the values method to reset the keys to consecutively numbered indexes:
@@ -2441,6 +2559,7 @@ sorted.all();
 ```
 
 You can use dot notation to sort by nested values
+
 ```js
 const collection = collect([
   {
@@ -2515,9 +2634,273 @@ sorted.all();
 // ]
 ```
 
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/sortBy.js)# `sortBy()`
+
+The sortBy method sorts the collection by the given key. The sorted collection keeps the original array keys, so in this example we'll use the values method to reset the keys to consecutively numbered indexes:
+
+```js
+const collection = collect([
+  { name: 'Desk', price: 200 },
+  { name: 'Chair', price: 100 },
+  { name: 'Bookcase', price: 150 },
+]);
+
+const sorted = collection.sortBy('price');
+
+sorted.all();
+
+// [
+//   { name: 'Chair', price: 100 },
+//   { name: 'Bookcase', price: 150 },
+//   { name: 'Desk', price: 200 },
+// ]
+```
+
+You can use dot notation to sort by nested values
+
+```js
+const collection = collect([
+  {
+    name: 'Desk',
+    price: 200,
+    manufacturer: {
+      name: 'IKEA',
+    },
+  },
+  {
+    name: 'Chair',
+    price: 100,
+    manufacturer: {
+      name: 'Herman Miller',
+    },
+  },
+  {
+    name: 'Bookcase',
+    price: 150,
+    manufacturer: {
+      name: 'IKEA',
+    },
+  },
+]);
+
+const sorted = collection.sortBy('manufacturer.name');
+
+sorted.all();
+
+// [
+//   {
+//     name: 'Chair',
+//     price: 100,
+//     manufacturer: {
+//       name: 'Herman Miller',
+//     },
+//   },
+//   {
+//     name: 'Desk',
+//     price: 200,
+//     manufacturer: {
+//       name: 'IKEA',
+//     },
+//   },
+//   {
+//     name: 'Bookcase',
+//     price: 150,
+//     manufacturer: {
+//       name: 'IKEA',
+//     },
+//   },
+// ]
+```
+
+You can also pass your own callback to determine how to sort the collection values:
+
+```js
+const collection = collect([
+  { name: 'Desk', colors: ['Black', 'Mahogany'] },
+  { name: 'Chair', colors: ['Black'] },
+  { name: 'Bookcase', colors: ['Red', 'Beige', 'Brown'] },
+]);
+
+const sorted = collection.sortBy((product, key) => product.colors.length);
+
+sorted.all();
+
+// [
+//   { name: 'Chair', colors: ['Black'] },
+//   { name: 'Desk', colors: ['Black', 'Mahogany'] },
+//   { name: 'Bookcase', colors: ['Red', 'Beige', 'Brown'] },
+// ]
+```
+
+You can also pass array of criteria or callbacks to determine how to sort the collection values:
+
+```js
+const collection = collect([
+  { name: 'Desk', price: 200 },
+  { name: 'Chair', price: 100 },
+  { name: 'Bookcase', price: 150 },
+]);
+
+const sorted = collection.sortByMany(['price']);
+
+sorted.all();
+
+// [
+//   { name: 'Chair', price: 100 },
+//   { name: 'Bookcase', price: 150 },
+//   { name: 'Desk', price: 200 },
+// ]
+```
+
+You can use multiple keys to sort. Keys are considered in the order they appear in the parameter.
+
+```js
+const collection = collect([
+  { name: 'Desk', price: 200 },
+  { name: 'Table', price: 200 },
+  { name: 'Chair', price: 100 },
+  { name: 'Bookcase', price: 150 },
+]);
+
+const sorted = collection.sortByMany(['price', 'name']);
+
+sorted.all();
+
+// [
+//   { name: 'Chair', price: 100 },
+//   { name: 'Bookcase', price: 150 },
+//   { name: 'Desk', price: 200 },
+//   { name: 'Table', price: 200 },
+// ]
+```
+
+You can use dot notation to sort by nested values
+
+```js
+const collection = collect([
+  {
+    name: 'Desk',
+    price: 200,
+    manufacturer: {
+      name: 'IKEA',
+    },
+  },
+  {
+    name: 'Chair',
+    price: 100,
+    manufacturer: {
+      name: 'Herman Miller',
+    },
+  },
+  {
+    name: 'Bookcase',
+    price: 150,
+    manufacturer: {
+      name: 'IKEA',
+    },
+  },
+]);
+
+const sorted = collection.sortByMany(['manufacturer.name']);
+
+sorted.all();
+
+// [
+//   {
+//     name: 'Chair',
+//     price: 100,
+//     manufacturer: {
+//       name: 'Herman Miller',
+//     },
+//   },
+//   {
+//     name: 'Desk',
+//     price: 200,
+//     manufacturer: {
+//       name: 'IKEA',
+//     },
+//   },
+//   {
+//     name: 'Bookcase',
+//     price: 150,
+//     manufacturer: {
+//       name: 'IKEA',
+//     },
+//   },
+// ]
+```
+
+You can also pass your own callback to determine how to sort the collection values:
+
+```js
+const collection = collect([
+  { name: 'Desk', colors: ['Black', 'Mahogany'] },
+  { name: 'Chair', colors: ['Black'] },
+  { name: 'Bookcase', colors: ['Red', 'Beige', 'Brown'] },
+]);
+
+const sorted = collection.sortByMany([(product, key) => product.colors.length]);
+
+sorted.all();
+
+// [
+//   { name: 'Chair', colors: ['Black'] },
+//   { name: 'Desk', colors: ['Black', 'Mahogany'] },
+//   { name: 'Bookcase', colors: ['Red', 'Beige', 'Brown'] },
+// ]
+```
+
+You can also pass multiple callbacks of your own to determine how to sort the collection values:
+
+```js
+const collection = collect([
+  { name: 'Desk', colors: ['Black', 'Mahogany'] },
+  { name: 'Chair', colors: ['Black', 'Mahogany'] },
+  { name: 'Bookcase', colors: ['Red', 'Beige', 'Brown'] },
+]);
+
+const sorted = collection.sortByMany([
+  (product, key) => product.colors.length,
+  (product, key) => product.name,
+]);
+
+sorted.all();
+
+// [
+//   { name: 'Chair', colors: ['Black', 'Mahogany'] },
+//   { name: 'Desk', colors: ['Black', 'Mahogany'] },
+//   { name: 'Bookcase', colors: ['Red', 'Beige', 'Brown'] },
+// ]
+```
+
+
 #### `sortByDesc()`
 
 This method has the same signature as the `sortBy` method, but will sort the collection in the opposite order.
+
+
+#### `sortByMany()`
+
+The sortByMany method sorts the collection by the given key. The sorted collection keeps the original array keys, so in this example we'll use the values method to reset the keys to consecutively numbered indexes:
+
+```js
+const collection = collect([
+  { name: 'Desk', colors: ['Black', 'Mahogany'] },
+  { name: 'Chair', colors: ['Black'] },
+  { name: 'Bookcase', colors: ['Red', 'Beige', 'Brown'] },
+]);
+
+const sorted = collection.sortByMany([(product, key) => product.colors.length]);
+
+sorted.all();
+
+// [
+//   { name: 'Chair', colors: ['Black'] },
+//   { name: 'Desk', colors: ['Black', 'Mahogany'] },
+//   { name: 'Bookcase', colors: ['Red', 'Beige', 'Brown'] },
+// ]
+```
+
 
 #### `sortDesc()`
 
@@ -2534,6 +2917,7 @@ sorted.all();
 ```
 
 Unlike `sort`, you may not pass a callback to `sortDesc`. If you wish to use a callback, you should use `sort` and invert your comparison.
+
 
 #### `sortKeys()`
 
@@ -2559,7 +2943,9 @@ sorted.all();
 
 
 #### `sortKeysDesc()`
+
 This method has the same signature as the [sortKeys](#sortkeys) method, but will sort the collection in the opposite order.
+
 
 #### `splice()`
 
@@ -2611,6 +2997,7 @@ collection.all();
 // [1, 2, 10, 11, 4, 5]
 ```
 
+
 #### `split()`
 
 The split method breaks a collection into the given number of groups:
@@ -2622,6 +3009,7 @@ const groups = collection.split(3);
 
 // [[1, 2], [3, 4], [5]]
 ```
+
 
 #### `sum()`
 
@@ -2655,10 +3043,11 @@ const collection = collect([
   { name: 'Bookcase', colors: ['Red', 'Beige', 'Brown'] },
 ]);
 
-const total = collection.sum(product => product.colors.length);
+const total = collection.sum((product) => product.colors.length);
 
 // 6
 ```
+
 
 #### `take()`
 
@@ -2675,6 +3064,7 @@ chunk.all();
 // [0, 1, 2]
 ```
 
+
 #### `takeUntil()`
 
 The `takeUntil` method returns items in the collection until the given callback returns `true`:
@@ -2682,7 +3072,7 @@ The `takeUntil` method returns items in the collection until the given callback 
 ```js
 const collection = collect([1, 2, 3, 4]);
 
-const subset = collection.takeUntil(item => item >= 3);
+const subset = collection.takeUntil((item) => item >= 3);
 
 subset.all();
 
@@ -2711,7 +3101,7 @@ The `takeWhile` method returns items in the collection until the given callback 
 ```js
 const collection = collect([1, 2, 3, 4]);
 
-const subset = collection.takeWhile(item => item < 3);
+const subset = collection.takeWhile((item) => item < 3);
 
 subset.all();
 
@@ -2738,17 +3128,19 @@ collect([2, 4, 3, 1, 5])
 // 1
 ```
 
+
 #### `times()`
 
 The times method creates a new collection by invoking the callback a given amount of times:
 
 ```js
-const collection = collect().times(10, number => number * 9);
+const collection = collect().times(10, (number) => number * 9);
 
 collection.all();
 
 // [9, 18, 27, 36, 45, 54, 63, 72, 81, 90]
 ```
+
 
 #### `toArray()`
 
@@ -2774,6 +3166,7 @@ collection.toArray();
 // ['Elon Musk', ['Tesla', 'Space X', 'SolarCity']]
 ```
 
+
 #### `toJson()`
 
 The toJson method converts the collection into JSON string:
@@ -2790,6 +3183,7 @@ const json = collection.toJson();
 // {"id": 384, "name": "Rayquaza", "gender": "NA"}
 ```
 
+
 #### `transform()`
 
 The transform method iterates over the collection and calls the given callback with each item in the collection. The items in the collection will be replaced by the values returned by the callback:
@@ -2805,6 +3199,7 @@ collection.all();
 ```
 
 > Unlike most other collection methods, `transform` modifies the collection itself. If you wish to create a new collection instead, use the `map` method.
+
 
 #### `undot()`
 
@@ -2866,6 +3261,7 @@ union.all();
 // }
 ```
 
+
 #### `unique()`
 
 The unique method returns all of the unique items in the collection:
@@ -2912,7 +3308,7 @@ const collection = collect([
   { name: 'Galaxy Gear', brand: 'Samsung', type: 'watch' },
 ]);
 
-const unique = collection.unique(item => item.brand + item.type);
+const unique = collection.unique((item) => item.brand + item.type);
 
 unique.all();
 
@@ -2924,6 +3320,7 @@ unique.all();
 // ]
 ```
 
+
 #### `unless()`
 
 The unless method will execute the given callback when the first argument given to the method evaluates to false:
@@ -2931,20 +3328,23 @@ The unless method will execute the given callback when the first argument given 
 ```js
 const collection = collect([1, 2, 3]);
 
-collection.unless(false, items => items.push(4));
+collection.unless(false, (items) => items.push(4));
 
 collection.all();
 
 // [1, 2, 3, 4]
 ```
 
+
 #### `unlessEmpty()`
 
-Alias for the [`whenNotEmpty()`](#whenNotEmpty) method
+Alias for the [`whenNotEmpty()`](/api/whenNotEmpty) method
+
 
 #### `unlessNotEmpty()`
 
-Alias for the [`whenEmpty()`](#whenEmpty) method
+Alias for the [`whenEmpty()`](/api/whenEmpty) method
+
 
 #### `unwrap()`
 
@@ -2957,6 +3357,7 @@ collect().unwrap(collection);
 
 // [1, 2, 3]
 ```
+
 
 #### `values()`
 
@@ -2977,6 +3378,7 @@ values.all();
 // [12, 'xoxo', 'abab', '1337']
 ```
 
+
 #### `when()`
 
 The when method will execute the given callback when the first argument given to the method evaluates to true:
@@ -2984,12 +3386,13 @@ The when method will execute the given callback when the first argument given to
 ```js
 const collection = collect([1, 2, 3]);
 
-collection.when(true, items => items.push(4));
+collection.when(true, (items) => items.push(4));
 
 collection.all();
 
 // [1, 2, 3, 4]
 ```
+
 
 #### `whenEmpty()`
 
@@ -2998,7 +3401,7 @@ The `whenEmpty` method will execute the given callback when the collection is em
 ```js
 const collection = collect([]);
 
-collection.whenEmpty(c => c.push('Mohamed Salah'));
+collection.whenEmpty((c) => c.push('Mohamed Salah'));
 
 collection.all();
 
@@ -3009,8 +3412,8 @@ collection.all();
 const collection = collect(['Darwin Núñez']);
 
 collection.whenEmpty(
-  c => c.push('Mohamed Salah'),
-  c => c.push('Xherdan Shaqiri'),
+  (c) => c.push('Mohamed Salah'),
+  (c) => c.push('Xherdan Shaqiri')
 );
 
 collection.all();
@@ -3029,7 +3432,7 @@ The `whenNotEmpty` method will execute the given callback when the collection is
 ```js
 const collection = collect(['Darwin Núñez']);
 
-collection.whenNotEmpty(c => c.push('Mohamed Salah'));
+collection.whenNotEmpty((c) => c.push('Mohamed Salah'));
 
 collection.all();
 
@@ -3043,8 +3446,8 @@ collection.all();
 const collection = collect(['Darwin Núñez']);
 
 collection.whenNotEmpty(
-  c => c.push('Mohamed Salah'),
-  c => c.push('Xherdan Shaqiri'),
+  (c) => c.push('Mohamed Salah'),
+  (c) => c.push('Xherdan Shaqiri')
 );
 
 collection.all();
@@ -3161,6 +3564,7 @@ filtered.all();
 // ]
 ```
 
+
 #### `whereBetween()`
 
 The whereBetween method filters the collection within a given range:
@@ -3184,6 +3588,7 @@ filtered.all();
 //   { product: 'Door', price: 100 },
 // ]
 ```
+
 
 #### `whereIn()`
 
@@ -3210,6 +3615,7 @@ filtered.all();
 
 > When working with nested objects `whereIn()` method allows dot notated keys. E.g. `whereIn('product.categories', ['office-supplies', 'furniture'])`
 
+
 #### `whereInstanceOf()`
 
 The whereInstanceOf method filters the collection by a given class type:
@@ -3230,6 +3636,7 @@ filtered.all();
 //   new Player('Salah'),
 // ]
 ```
+
 
 #### `whereNotBetween()`
 
@@ -3253,6 +3660,7 @@ filtered.all();
 //   { product: 'Pencil', price: 30 },
 // ]
 ```
+
 
 #### `whereNotIn()`
 
@@ -3278,18 +3686,23 @@ filtered.all();
 
 > When working with nested objects `whereNotIn()` method allows dot notated keys. E.g. `whereNotIn('product .categories', ['office-supplies', 'furniture'])`
 
+
 #### `whereNotNull()`
 
 The `whereNotNull` method filters items where the given key is not null.
 
 ```js
-const collection = collect([{
-  name: 'Mohamed Salah',
-}, {
-  name: null,
-}, {
-  name: 'Darwin Núñez',
-}]);
+const collection = collect([
+  {
+    name: 'Mohamed Salah',
+  },
+  {
+    name: null,
+  },
+  {
+    name: 'Darwin Núñez',
+  },
+]);
 
 const filtered = collection.whereNotNull();
 
@@ -3307,13 +3720,17 @@ filtered.all();
 The `whereNull` method filters items where the given key is null.
 
 ```js
-const collection = collect([{
-  name: 'Mohamed Salah',
-}, {
-  name: null,
-}, {
-  name: 'Darwin Núñez',
-}]);
+const collection = collect([
+  {
+    name: 'Mohamed Salah',
+  },
+  {
+    name: null,
+  },
+  {
+    name: 'Darwin Núñez',
+  },
+]);
 
 const filtered = collection.whereNull();
 
@@ -3337,6 +3754,7 @@ collection.all();
 // [1, 2, 3]
 ```
 
+
 #### `zip()`
 
 The zip method merges together the values of the given array with the values of the original collection at the corresponding index:
@@ -3351,10 +3769,14 @@ zipped.all();
 // [['Chair', 100], ['Desk', 200]]
 ```
 
+
 ### Contribute
 
 PRs are welcomed to this project, and help is needed in order to keep up with the changes of Laravel Collections. If you want to improve the collection library, add functionality or improve the docs please feel free to submit a PR.
 
 ### License
 
-MIT © [Daniel Eckermann](https://danieleckermann.com)
+MIT © [Toneflix Technologies Limited](https://toneflix.net)
+
+[tel]: https://github.com/h3ravel/collect.js/actions/workflows/node.js.yml
+[tei]: https://github.com/h3ravel/collect.js/actions/workflows/node.js.yml/badge.svg

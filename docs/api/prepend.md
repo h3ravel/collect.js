@@ -31,4 +31,4 @@ collection.all();
 // }
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/prepend.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/prepend.js)

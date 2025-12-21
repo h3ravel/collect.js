@@ -9,4 +9,4 @@ const collection = collect([1, 2, 3]).dd();
 // (Exits node.js process)
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/dd.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/dd.js)

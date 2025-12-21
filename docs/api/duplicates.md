@@ -12,4 +12,4 @@ duplicates.all();
 // { 2: 'a', 4: 'b' }
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/duplicates.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/duplicates.js)

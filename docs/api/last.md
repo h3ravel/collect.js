@@ -5,7 +5,7 @@ The last method returns the last element in the collection that passes a given t
 ```js
 const collection = collect([1, 2, 3]);
 
-const last = collection.last(item => item > 1);
+const last = collection.last((item) => item > 1);
 
 // 3
 ```
@@ -18,4 +18,4 @@ collect([1, 2, 3, 4]).last();
 // 4
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/last.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/last.js)

@@ -5,7 +5,7 @@ The `takeWhile` method returns items in the collection until the given callback 
 ```js
 const collection = collect([1, 2, 3, 4]);
 
-const subset = collection.takeWhile(item => item < 3);
+const subset = collection.takeWhile((item) => item < 3);
 
 subset.all();
 
@@ -14,4 +14,4 @@ subset.all();
 
 > If the callback never returns `false`, the `takeWhile` method will return all items in the collection.
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/takeWhile.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/takeWhile.js)

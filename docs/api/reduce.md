@@ -18,4 +18,4 @@ const total = collection.reduce((carry, item) => carry + item, 4);
 // 10
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/reduce.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/reduce.js)

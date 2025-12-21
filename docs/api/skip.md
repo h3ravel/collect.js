@@ -24,4 +24,4 @@ collection.skip(4).all();
 // { fifth: 'fifth' }
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/skip.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/skip.js)

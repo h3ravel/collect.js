@@ -5,7 +5,7 @@ The `whenEmpty` method will execute the given callback when the collection is em
 ```js
 const collection = collect([]);
 
-collection.whenEmpty(c => c.push('Mohamed Salah'));
+collection.whenEmpty((c) => c.push('Mohamed Salah'));
 
 collection.all();
 
@@ -16,8 +16,8 @@ collection.all();
 const collection = collect(['Darwin Núñez']);
 
 collection.whenEmpty(
-  c => c.push('Mohamed Salah'),
-  c => c.push('Xherdan Shaqiri'),
+  (c) => c.push('Mohamed Salah'),
+  (c) => c.push('Xherdan Shaqiri')
 );
 
 collection.all();
@@ -28,4 +28,4 @@ collection.all();
 // ];
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/whenEmpty.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/whenEmpty.js)

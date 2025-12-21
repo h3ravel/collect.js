@@ -15,4 +15,4 @@ sequence.all();
 // [1, 5, 9, 13, 17]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/mapSpread.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/mapSpread.js)

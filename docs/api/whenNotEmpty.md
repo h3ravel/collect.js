@@ -5,7 +5,7 @@ The `whenNotEmpty` method will execute the given callback when the collection is
 ```js
 const collection = collect(['Darwin Núñez']);
 
-collection.whenNotEmpty(c => c.push('Mohamed Salah'));
+collection.whenNotEmpty((c) => c.push('Mohamed Salah'));
 
 collection.all();
 
@@ -19,8 +19,8 @@ collection.all();
 const collection = collect(['Darwin Núñez']);
 
 collection.whenNotEmpty(
-  c => c.push('Mohamed Salah'),
-  c => c.push('Xherdan Shaqiri'),
+  (c) => c.push('Mohamed Salah'),
+  (c) => c.push('Xherdan Shaqiri')
 );
 
 collection.all();
@@ -31,4 +31,4 @@ collection.all();
 // ];
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/whenNotEmpty.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/whenNotEmpty.js)

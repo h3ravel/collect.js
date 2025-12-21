@@ -15,6 +15,7 @@ collection.all();
 ```
 
 You may provide number of items to pop. This will return the popped items in a new collection:
+
 ```js
 const collection = collect([1, 2, 3, 4, 5]);
 
@@ -27,4 +28,4 @@ collection.all();
 // => [1, 2, 3]
 ```
 
-[View source on GitHub](https://github.com/ecrmnn/collect.js/blob/master/src/methods/pop.js)
+[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/pop.js)
