@@ -9,9 +9,6 @@ hero:
     - theme: brand
       text: Get Started →
       link: /installation/
-    - theme: alt
-      text: API Examples
-      link: /api-examples
 
 features:
   - title: 📄 Beautiful API
