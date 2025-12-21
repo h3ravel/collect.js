@@ -2,16 +2,13 @@
 
 > Convenient and dependency free wrapper for working with arrays and objects, completely rewritten in Typescript and actively maintained.
 
-
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fh3ravel%2Fcollect.js%2Fbadge%3Fref%3Dmainstyle=flat-square&label=build)](https://github.com/h3ravel/collect.js/actions)
-[![npm version](https://img.shields.io/npm/v/@h3ravel/collect.js.svg?style=flat-square)](http://badge.fury.io/js/@h3ravel/collect.js)
-[![npm downloads](https://img.shields.io/npm/dm/@h3ravel/collect.js.svg?style=flat-square)](http://badge.fury.io/js/@h3ravel/collect.js)
-[![npm license](https://img.shields.io/npm/l/@h3ravel/collect.js.svg?style=flat-square)](http://badge.fury.io/js/@h3ravel/collect.js)
+[![npm version](https://badge.fury.io/js/@h3ravel%2Fcollect.js.svg)](https://www.npmjs.com/package/@h3ravel/collect.js)
+[![npm downloads](https://img.shields.io/npm/dm/@h3ravel%2Fcollect.js.svg?style=flat-square)](https://www.npmjs.com/package/@h3ravel/collect.js)
+[![npm license](https://img.shields.io/npm/l/@h3ravel%2Fcollect.js.svg?style=flat-square)](https://www.npmjs.com/package/@h3ravel/collect.js)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg?style=flat-square)](https://github.com/h3ravel/collect.js/blob/main/package.json)
-[![cdnjs version](https://img.shields.io/cdnjs/v/@h3ravel/collect.js.svg?style=flat-square)](https://cdnjs.com/libraries/@h3ravel/collect.js)
+[![cdnjs version](https://img.shields.io/cdnjs/v/@h3ravel%2Fcollect.js.svg?style=flat-square)](https://cdnjs.com/libraries/@h3ravel/collect.js)
 [![Tests][tei]][tel]
-
 
 ## Installation
 
@@ -46,7 +43,6 @@ yarn add @h3ravel/collect.js
 ### Tip
 
 Using Laravel as your backend? Collect.js offers an (almost) identical api to [Laravel Collections](https://laravel.com/docs/master/collections). [See differences](#strictness-and-comparisons).
-
 
 ### API
 
@@ -192,7 +188,6 @@ All comparisons in `collect.js` are done using strict equality. Using loose equa
 - ~~`whereInStrict`~~ use `whereIn()`
 - ~~`whereNotInStrict`~~ use `whereNotIn()`
 
-
 #### `add()`
 
 The add method adds a single item to the collection.
@@ -202,7 +197,6 @@ collect([1, 2, 3, 4]).add(5);
 
 // [1, 2, 3, 4, 5]
 ```
-
 
 #### `all()`
 
@@ -226,11 +220,9 @@ collect({
 // }
 ```
 
-
 #### `average()`
 
 Alias for the [`avg()`](/api/avg) method
-
 
 #### `avg()`
 
@@ -280,7 +272,6 @@ collection.avg((book) => book.pages);
 // 636
 ```
 
-
 #### `chunk()`
 
 The chunk method breaks the collection into multiple, smaller collections of a given size:
@@ -294,7 +285,6 @@ chunks.all();
 
 // [[1, 2, 3, 4], [5, 6, 7]]
 ```
-
 
 #### `collapse()`
 
@@ -324,7 +314,6 @@ collapsed.all();
 // [1, 2, 3, 4, 5, 6, 7, 8, 9]
 ```
 
-
 #### `combine()`
 
 The combine method combines the keys of the collection with the values of another array or collection:
@@ -341,7 +330,6 @@ combine.all();
 //   number: 11
 // }
 ```
-
 
 #### `concat()`
 
@@ -363,7 +351,6 @@ concatenated.all();
 
 // [1, 2, 3, 'a', 'b', 'c', 'Mohamed Salah', 11]
 ```
-
 
 #### `contains()`
 
@@ -416,7 +403,6 @@ collection.contains((value, key) => value > 5);
 // false
 ```
 
-
 #### `containsOneItem()`
 
 The containsOneItem method returns true if the collection contains exactly one item; otherwise, false is returned:
@@ -447,7 +433,6 @@ collect({}).containsOneItem();
 // false
 ```
 
-
 #### `count()`
 
 The count method returns the total number of items in the collection:
@@ -459,7 +444,6 @@ collection.count();
 
 // 4
 ```
-
 
 #### `countBy()`
 
@@ -498,7 +482,6 @@ counted.all();
 // }
 ```
 
-
 #### `crossJoin()`
 
 The crossJoin method cross joins the collection with the given array or collection, returning all possible permutations:
@@ -518,7 +501,6 @@ joined.all();
 // ]
 ```
 
-
 #### `dd()`
 
 The dd method will `console.log` the collection and exit the current process:
@@ -529,7 +511,6 @@ const collection = collect([1, 2, 3]).dd();
 // Collection { items: [ 1, 2, 3 ] }
 // (Exits node.js process)
 ```
-
 
 #### `diff()`
 
@@ -544,7 +525,6 @@ diff.all();
 
 // [4, 5]
 ```
-
 
 #### `diffAssoc()`
 
@@ -570,7 +550,6 @@ diff.all();
 // { color: 'orange', remain: 6 };
 ```
 
-
 #### `diffKeys()`
 
 The diffKeys method compares the collection against another collection or a plain object based on its keys. This method will return the key / value pairs in the original collection that are not present in the given collection:
@@ -592,7 +571,6 @@ diff.all();
 
 // { a: 'a', c: 'c' }
 ```
-
 
 #### `diffUsing()`
 
@@ -617,7 +595,6 @@ diff.all();
 
 // [{ name: 'Alice', age: 25 }]
 ```
-
 
 #### `doesntContain()`
 
@@ -665,7 +642,6 @@ collection.doesntContain('name', 'Darwin Núñez');
 // true
 ```
 
-
 #### `dot()`
 
 The dot method allows accessing objects using the dot notation.
@@ -692,7 +668,6 @@ collect({
 // }
 ```
 
-
 #### `dump()`
 
 The dump method outputs the results at that moment and then continues processing:
@@ -707,7 +682,6 @@ collect([1, 2, 3, 4])
 // Collection { items: [ 2, 4, 6, 8 ] }
 ```
 
-
 #### `duplicates()`
 
 The duplicates method retrieves and returns duplicate values from the collection:
@@ -721,7 +695,6 @@ duplicates.all();
 
 // { 2: 'a', 4: 'b' }
 ```
-
 
 #### `each()`
 
@@ -759,7 +732,6 @@ collection.each((item) => {
 // 7
 ```
 
-
 #### `eachSpread()`
 
 The eachSpread method iterates over the collection's items, passing each nested item value into the given callback:
@@ -781,7 +753,6 @@ You may stop iterating through the items by returning false from the callback:
 collection.eachSpread((name, age) => false);
 ```
 
-
 #### `every()`
 
 The every method may be used to verify that all elements of a collection pass a given truth test:
@@ -791,7 +762,6 @@ collect([1, 2, 3, 4]).every((value, key) => value > 2);
 
 // false
 ```
-
 
 #### `except()`
 
@@ -818,7 +788,6 @@ collect([1, 2, 3, 4]).except([2, 12]).all();
 ```
 
 > For the inverse of `except`, see the `only` method.
-
 
 #### `filter()`
 
@@ -864,7 +833,6 @@ filtered.all();
 
 > For the inverse of `filter`, see the `reject` method.
 
-
 #### `first()`
 
 The first method returns the first element in the collection that passes a given truth test:
@@ -882,7 +850,6 @@ collect([1, 2, 3, 4]).first();
 
 // 1
 ```
-
 
 #### `firstOrFail()`
 
@@ -929,7 +896,6 @@ collection.firstOrFail('product', '=', 'Desk');
 // { product: 'Desk', price: 200, discounted: true }
 ```
 
-
 #### `firstWhere()`
 
 The firstWhere method returns the first element in the collection with the given key / value pair:
@@ -946,7 +912,6 @@ collection.firstWhere('name', 'Linda');
 
 // { name: 'Linda', age: 14 }
 ```
-
 
 #### `flatMap()`
 
@@ -970,7 +935,6 @@ flatMapped.all();
 
 // ['DARWIN NÚÑEZ', 'MOHAMED SALAH']
 ```
-
 
 #### `flatten()`
 
@@ -1019,7 +983,6 @@ flattened.all();
 
 In this example, calling flatten without providing the depth would have also flattened the nested arrays, resulting in `['iPhone 6S', 'Apple', 'Galaxy S7', 'Samsung']`. Providing a depth allows you to restrict the levels of nested arrays that will be flattened.
 
-
 #### `flip()`
 
 The flip method swaps the collection's keys with their corresponding values:
@@ -1040,7 +1003,6 @@ flipped.all();
 // }
 ```
 
-
 #### `forPage()`
 
 The forPage method returns a new collection containing the items that would be present on a given page number. The method accepts the page number as its first argument and the number of items to show per page as its second argument:
@@ -1054,7 +1016,6 @@ forPage.all();
 
 // [4, 5, 6]
 ```
-
 
 #### `forget()`
 
@@ -1076,7 +1037,6 @@ collection.all();
 ```
 
 > Unlike most other collection methods, forget does not return a new modified collection; it modifies the collection it is called on.
-
 
 #### `get()`
 
@@ -1129,7 +1089,6 @@ collection.get('middlename', () => 'default-value');
 
 // default-value
 ```
-
 
 #### `groupBy()`
 
@@ -1241,7 +1200,6 @@ grouped.all();
 // }
 ```
 
-
 #### `has()`
 
 The has method determines if one or more keys exists in the collection:
@@ -1264,7 +1222,6 @@ collection.has(['animal', 'ability', 'name']);
 
 // false
 ```
-
 
 #### `implode()`
 
@@ -1299,7 +1256,6 @@ collect([1, 2, 3, 4, 5]).implode('-');
 // 1-2-3-4-5
 ```
 
-
 #### `intersect()`
 
 The intersect method removes any values from the original collection that are not present in the given `array` or `collection`. The resulting collection will preserve the original collection's keys:
@@ -1313,7 +1269,6 @@ intersect.all();
 
 // [1, 2, 3]
 ```
-
 
 #### `intersectByKeys()`
 
@@ -1348,7 +1303,6 @@ intersect.all();
 // [1, 2, 3]
 ```
 
-
 #### `isEmpty()`
 
 The isEmpty method returns true if the collection is empty; otherwise, false is returned:
@@ -1363,7 +1317,6 @@ collect([]).isEmpty();
 collect({}).isEmpty();
 // true
 ```
-
 
 #### `isNotEmpty()`
 
@@ -1382,7 +1335,6 @@ collect([]).isNotEmpty();
 collect({}).isNotEmpty();
 // false
 ```
-
 
 #### `join()`
 
@@ -1404,7 +1356,6 @@ collect(['a']).join(', ', ' and ');
 collect([]).join(', ', ' and ');
 // ''
 ```
-
 
 #### `keyBy()`
 
@@ -1461,7 +1412,6 @@ upperCased.all();
 // }
 ```
 
-
 #### `keys()`
 
 The keys method returns all of the collection's keys:
@@ -1478,7 +1428,6 @@ keys = collection.keys();
 
 // ['club', 'nickname']
 ```
-
 
 #### `last()`
 
@@ -1500,7 +1449,6 @@ collect([1, 2, 3, 4]).last();
 // 4
 ```
 
-
 #### `macro()`
 
 The macro method lets you register custom methods
@@ -1521,13 +1469,11 @@ collection.all();
 
 > Note that the `macro` method returns `undefined`, and therefore it is not possible to use it within a chain of methods.
 
-
 #### `make()`
 
 The make method creates a new collection instance.
 
 > This is only added to adhere to the Laravel collection API, when using Collect.js it's recommended to use `collect()` directly when creating a new collection.
-
 
 #### `map()`
 
@@ -1544,7 +1490,6 @@ multiplied.all();
 ```
 
 > Like most other collection methods, `map` returns a new collection instance; it does not modify the collection it is called on. If you want to transform the original collection, use the `transform` method.
-
 
 #### `mapInto()`
 
@@ -1567,7 +1512,6 @@ players.all();
 // ]
 ```
 
-
 #### `mapSpread()`
 
 The mapSpread method iterates over the collection's items, passing each nested item value into the given callback.
@@ -1584,7 +1528,6 @@ sequence.all();
 
 // [1, 5, 9, 13, 17]
 ```
-
 
 #### `mapToDictionary()`
 
@@ -1610,7 +1553,6 @@ groups.all();
 // }
 ```
 
-
 #### `mapToGroups()`
 
 The mapToGroups method iterates through the collection and passes each value to the given callback:
@@ -1631,7 +1573,6 @@ const groups = collection.mapToGroups((item, key) => [item.name, item.id]);
 //   C: [3],
 // }
 ```
-
 
 #### `mapWithKeys()`
 
@@ -1660,7 +1601,6 @@ keyed.all();
 //   'jane@example.com': 'Jane',
 // }
 ```
-
 
 #### `max()`
 
@@ -1693,7 +1633,6 @@ collect([-1, -2345, 12, 11, 3]).max();
 // 12
 ```
 
-
 #### `median()`
 
 The median method returns the median value of a given key:
@@ -1722,7 +1661,6 @@ collect([
 
 // 1.5
 ```
-
 
 #### `merge()`
 
@@ -1756,7 +1694,6 @@ merged.all();
 // ['Unicorn', 'Rainbow', 'Sunshine', 'Rainbow']
 ```
 
-
 #### `mergeRecursive()`
 
 The mergeRecursive method merges the given array or collection recursively with the original collection. If a string key in the given items matches a string key in the original collection, then the values for these keys are merged together into an array, and this is done recursively:
@@ -1781,7 +1718,6 @@ merged.all();
 //   discount: false,
 // }
 ```
-
 
 #### `min()`
 
@@ -1810,7 +1746,6 @@ collect([1, 2, 3, 4, 5]).min();
 
 // 1
 ```
-
 
 #### `mode()`
 
@@ -1841,7 +1776,6 @@ collect([
 // [1]
 ```
 
-
 #### `nth()`
 
 The nth method creates a new collection consisting of every n-th element:
@@ -1855,7 +1789,6 @@ nth.all();
 
 // ['a', 'e']
 ```
-
 
 #### `only()`
 
@@ -1884,7 +1817,6 @@ collect([1, 2, 3, 4]).only([2, 12]).all();
 
 > For the inverse of `only`, see the `except` method.
 
-
 #### `pad()`
 
 The pad method will fill the array with the given value until the array reaches the specified size. This method
@@ -1908,7 +1840,6 @@ filtered.all();
 // [0, 0, 'A', 'B', 'C']
 ```
 
-
 #### `partition()`
 
 The partition method may be combined with destructuring to separate elements that pass a given truth test from those that do not:
@@ -1918,7 +1849,6 @@ const collection = collect([1, 2, 3, 4, 5, 6]);
 
 const [underThree, overThree] = collection.partition((i) => i < 3);
 ```
-
 
 #### `pipe()`
 
@@ -1931,7 +1861,6 @@ const piped = collection.pipe((items) => items.sum());
 
 // 6
 ```
-
 
 #### `pluck()`
 
@@ -2033,7 +1962,6 @@ plucked.all();
 // ]
 ```
 
-
 #### `pop()`
 
 The pop method removes and returns the last item from the collection:
@@ -2063,7 +1991,6 @@ collection.all();
 
 // => [1, 2, 3]
 ```
-
 
 #### `prepend()`
 
@@ -2098,7 +2025,6 @@ collection.all();
 // }
 ```
 
-
 #### `pull()`
 
 The pull method removes and returns an item from the collection by its key:
@@ -2118,7 +2044,6 @@ collection.all();
 // { firstname: 'Michael' }
 ```
 
-
 #### `push()`
 
 The push method appends an item to the end of the collection:
@@ -2133,7 +2058,6 @@ collection.all();
 // [1, 2, 3, 4, 5]
 ```
 
-
 #### `put()`
 
 The put method sets the given key and value in the collection:
@@ -2147,7 +2071,6 @@ collection.all();
 
 // ['JavaScript', 'Python', 'Ruby']
 ```
-
 
 #### `random()`
 
@@ -2177,7 +2100,6 @@ oneRandom.all();
 // [3]
 ```
 
-
 #### `reduce()`
 
 The reduce method reduces the collection to a single value, passing the result of each iteration into the subsequent iteration:
@@ -2198,7 +2120,6 @@ const total = collection.reduce((carry, item) => carry + item, 4);
 // 10
 ```
 
-
 #### `reject()`
 
 The reject method filters the collection using the given callback. The callback should return true if the item should be removed from the resulting collection:
@@ -2212,7 +2133,6 @@ const filtered = collection.reject((value) => value > 2);
 ```
 
 > For the inverse of the `reject` method, see the `filter` method.
-
 
 #### `replace()`
 
@@ -2235,7 +2155,6 @@ replaced.all();
 //   number: 45,
 // }
 ```
-
 
 #### `replaceRecursive()`
 
@@ -2262,7 +2181,6 @@ replaced.all();
 // }
 ```
 
-
 #### `reverse()`
 
 The reverse method reverses the order of the collection's items:
@@ -2276,7 +2194,6 @@ reversed.all();
 
 // [5, 4, 3, 2, 1]
 ```
-
 
 #### `search()`
 
@@ -2305,7 +2222,6 @@ collection.search((item, key) => item > 5);
 
 // 2
 ```
-
 
 #### `shift()`
 
@@ -2337,7 +2253,6 @@ collection.all();
 // => [3, 4, 5]
 ```
 
-
 #### `shuffle()`
 
 The shuffle method randomly shuffles the items in the collection:
@@ -2351,7 +2266,6 @@ shuffled.all();
 
 // [3, 5, 1, 2, 4] (generated randomly)
 ```
-
 
 #### `skip()`
 
@@ -2379,7 +2293,6 @@ collection.skip(4).all();
 // { fifth: 'fifth' }
 ```
 
-
 #### `skipUntil()`
 
 The `skipUntil` method skips items until the given callback returns `true` and then returns the remaining items in the collection:
@@ -2405,7 +2318,6 @@ subset.all();
 
 // [3, 4]
 ```
-
 
 #### `skipWhile()`
 
@@ -2435,7 +2347,6 @@ subset.all();
 // [2, 2, 3, 3, 4, 4]
 ```
 
-
 #### `slice()`
 
 The slice method returns a slice of the collection starting at the given index:
@@ -2459,7 +2370,6 @@ slice.all();
 
 // [5, 6]
 ```
-
 
 #### `sole()`
 
@@ -2502,11 +2412,9 @@ collection.sole('product', '=', 'Desk');
 // { product: 'Desk', price: 200, discounted: true }
 ```
 
-
 #### `some()`
 
 Alias for the [contains](/api/contains) method.
-
 
 #### `sort()`
 
@@ -2535,7 +2443,6 @@ sorted.all();
 ```
 
 > If you need to sort a collection of nested arrays or objects, see the `sortBy` and `sortByDesc` methods.
-
 
 #### `sortBy()`
 
@@ -2874,11 +2781,9 @@ sorted.all();
 // ]
 ```
 
-
 #### `sortByDesc()`
 
 This method has the same signature as the `sortBy` method, but will sort the collection in the opposite order.
-
 
 #### `sortByMany()`
 
@@ -2902,7 +2807,6 @@ sorted.all();
 // ]
 ```
 
-
 #### `sortDesc()`
 
 This method will sort the collection in the opposite order as the `sort` method.
@@ -2918,7 +2822,6 @@ sorted.all();
 ```
 
 Unlike `sort`, you may not pass a callback to `sortDesc`. If you wish to use a callback, you should use `sort` and invert your comparison.
-
 
 #### `sortKeys()`
 
@@ -2942,11 +2845,9 @@ sorted.all();
 // }
 ```
 
-
 #### `sortKeysDesc()`
 
 This method has the same signature as the [sortKeys](/api/sortkeys) method, but will sort the collection in the opposite order.
-
 
 #### `splice()`
 
@@ -2998,7 +2899,6 @@ collection.all();
 // [1, 2, 10, 11, 4, 5]
 ```
 
-
 #### `split()`
 
 The split method breaks a collection into the given number of groups:
@@ -3010,7 +2910,6 @@ const groups = collection.split(3);
 
 // [[1, 2], [3, 4], [5]]
 ```
-
 
 #### `sum()`
 
@@ -3049,7 +2948,6 @@ const total = collection.sum((product) => product.colors.length);
 // 6
 ```
 
-
 #### `take()`
 
 The take method returns a new collection with the specified number of items:
@@ -3064,7 +2962,6 @@ chunk.all();
 
 // [0, 1, 2]
 ```
-
 
 #### `takeUntil()`
 
@@ -3094,7 +2991,6 @@ subset.all();
 // [1, 2]
 ```
 
-
 #### `takeWhile()`
 
 The `takeWhile` method returns items in the collection until the given callback returns `false`:
@@ -3110,7 +3006,6 @@ subset.all();
 ```
 
 > If the callback never returns `false`, the `takeWhile` method will return all items in the collection.
-
 
 #### `tap()`
 
@@ -3129,7 +3024,6 @@ collect([2, 4, 3, 1, 5])
 // 1
 ```
 
-
 #### `times()`
 
 The times method creates a new collection by invoking the callback a given amount of times:
@@ -3141,7 +3035,6 @@ collection.all();
 
 // [9, 18, 27, 36, 45, 54, 63, 72, 81, 90]
 ```
-
 
 #### `toArray()`
 
@@ -3167,7 +3060,6 @@ collection.toArray();
 // ['Elon Musk', ['Tesla', 'Space X', 'SolarCity']]
 ```
 
-
 #### `toJson()`
 
 The toJson method converts the collection into JSON string:
@@ -3184,7 +3076,6 @@ const json = collection.toJson();
 // {"id": 384, "name": "Rayquaza", "gender": "NA"}
 ```
 
-
 #### `transform()`
 
 The transform method iterates over the collection and calls the given callback with each item in the collection. The items in the collection will be replaced by the values returned by the callback:
@@ -3200,7 +3091,6 @@ collection.all();
 ```
 
 > Unlike most other collection methods, `transform` modifies the collection itself. If you wish to create a new collection instead, use the `map` method.
-
 
 #### `undot()`
 
@@ -3236,7 +3126,6 @@ const all = undotted.all();
 // }
 ```
 
-
 #### `union()`
 
 The union method adds the given array to the collection. If the given array contains keys that are already in the original collection, the original collection's values will be preferred:
@@ -3261,7 +3150,6 @@ union.all();
 //   c: 'CCC',
 // }
 ```
-
 
 #### `unique()`
 
@@ -3321,7 +3209,6 @@ unique.all();
 // ]
 ```
 
-
 #### `unless()`
 
 The unless method will execute the given callback when the first argument given to the method evaluates to false:
@@ -3336,16 +3223,13 @@ collection.all();
 // [1, 2, 3, 4]
 ```
 
-
 #### `unlessEmpty()`
 
 Alias for the [`whenNotEmpty()`](/api/whenNotEmpty) method
 
-
 #### `unlessNotEmpty()`
 
 Alias for the [`whenEmpty()`](/api/whenEmpty) method
-
 
 #### `unwrap()`
 
@@ -3358,7 +3242,6 @@ collect().unwrap(collection);
 
 // [1, 2, 3]
 ```
-
 
 #### `values()`
 
@@ -3379,7 +3262,6 @@ values.all();
 // [12, 'xoxo', 'abab', '1337']
 ```
 
-
 #### `when()`
 
 The when method will execute the given callback when the first argument given to the method evaluates to true:
@@ -3393,7 +3275,6 @@ collection.all();
 
 // [1, 2, 3, 4]
 ```
-
 
 #### `whenEmpty()`
 
@@ -3424,7 +3305,6 @@ collection.all();
 //   'Xherdan Shaqiri',
 // ];
 ```
-
 
 #### `whenNotEmpty()`
 
@@ -3458,7 +3338,6 @@ collection.all();
 //   'Mohamed Salah',
 // ];
 ```
-
 
 #### `where()`
 
@@ -3565,7 +3444,6 @@ filtered.all();
 // ]
 ```
 
-
 #### `whereBetween()`
 
 The whereBetween method filters the collection within a given range:
@@ -3589,7 +3467,6 @@ filtered.all();
 //   { product: 'Door', price: 100 },
 // ]
 ```
-
 
 #### `whereIn()`
 
@@ -3616,7 +3493,6 @@ filtered.all();
 
 > When working with nested objects `whereIn()` method allows dot notated keys. E.g. `whereIn('product.categories', ['office-supplies', 'furniture'])`
 
-
 #### `whereInstanceOf()`
 
 The whereInstanceOf method filters the collection by a given class type:
@@ -3637,7 +3513,6 @@ filtered.all();
 //   new Player('Salah'),
 // ]
 ```
-
 
 #### `whereNotBetween()`
 
@@ -3662,7 +3537,6 @@ filtered.all();
 // ]
 ```
 
-
 #### `whereNotIn()`
 
 The whereNotIn method filters the collection by a given key / value not contained within the given array:
@@ -3686,7 +3560,6 @@ filtered.all();
 ```
 
 > When working with nested objects `whereNotIn()` method allows dot notated keys. E.g. `whereNotIn('product .categories', ['office-supplies', 'furniture'])`
-
 
 #### `whereNotNull()`
 
@@ -3715,7 +3588,6 @@ filtered.all();
 // ]
 ```
 
-
 #### `whereNull()`
 
 The `whereNull` method filters items where the given key is null.
@@ -3742,7 +3614,6 @@ filtered.all();
 // ]
 ```
 
-
 #### `wrap()`
 
 The wrap method will wrap the given value in a collection:
@@ -3754,7 +3625,6 @@ collection.all();
 
 // [1, 2, 3]
 ```
-
 
 #### `zip()`
 
@@ -3769,7 +3639,6 @@ zipped.all();
 
 // [['Chair', 100], ['Desk', 200]]
 ```
-
 
 ### Contribute
 
