@@ -8,6 +8,7 @@ export default defineConfig(
     {
         languageOptions: {
             parserOptions: {
+                // eslint-disable-next-line no-undef
                 tsconfigRootDir: process.cwd()
             },
         },
@@ -26,6 +27,7 @@ export default defineConfig(
     },
     [
         globalIgnores([
+            'docs/.vitepress/**',
             'dist/**',
             '**/dist',
             '**/dist/**',

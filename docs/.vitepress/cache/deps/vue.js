@@ -170,7 +170,7 @@ import {
   withMemo,
   withModifiers,
   withScopeId
-} from "./chunk-VNPZRBM4.js";
+} from './chunk-VNPZRBM4.js'
 export {
   BaseTransition,
   BaseTransitionPropsValidators,
@@ -343,4 +343,4 @@ export {
   withMemo,
   withModifiers,
   withScopeId
-};
+}

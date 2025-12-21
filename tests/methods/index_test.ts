@@ -4,11 +4,12 @@
 // const { collect: destructuredCollection } = require('../../dist')
 // const { Collection } = require('../../dist')
 
-import { ExpectStatic, TestAPI } from 'vitest'
+// import { ExpectStatic, TestAPI } from 'vitest'
 
 // import { collect } from '../../src/collection'
 
-export default (it: TestAPI, expect: ExpectStatic) => {
+export default () => {
+  // export default (it: TestAPI, expect: ExpectStatic) => {
   // it('should be a function', () => {
   //   expect(typeof commonImport).to.eql('function')
   //   expect(typeof destructuredCollection).to.eql('function')

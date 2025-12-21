@@ -1,4 +1,4 @@
-name: Collect.js CI
+name: Collect.js CI 
 
 on:
   push:
@@ -7,28 +7,38 @@ on:
       - 'feature/*'
       - 'hotfix/*'
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-  build:
+  run-tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ['18', '16', '14', '12', '10', '8', '6']
+        node-version: [20.x, 22.x, '18', '16', '14', '12', '10', '8', '6']
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        
-    - name: Install Dependencies
-      run: npm install
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
-    - name: Run Linter and Tests
-      run: |
-        npm run eslint:strict
-        npm run coverage
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Linter and Tests
+        run: |
+          pnpm run eslint:strict
+          pnpm run coverage
+
+      - name: Upload coverage reports to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: h3ravel/collect.js
+          files: ./coverage/lcov.info
+          fail_ci_if_error: true
