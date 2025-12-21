@@ -12,18 +12,18 @@ export default defineConfig({
       {
         rel: 'icon',
         type: 'image/png',
-        href: 'https://raw.githubusercontent.com/h3ravel/collect.js/main/collectjs.jpg',
+        href: 'https://raw.githubusercontent.com/h3ravel/collect.js/main/banner.jpg',
       }
     ],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:url', content: 'https://collect.js.toneflix.net' }],
     ['meta', { property: 'og:title', content: 'Collect.js' }],
-    ['meta', { property: 'og:image', content: 'https://raw.githubusercontent.com/h3ravel/collect.js/main/collectjs.jpg' }],
+    ['meta', { property: 'og:image', content: 'https://raw.githubusercontent.com/h3ravel/collect.js/main/banner.jpg' }],
     ['meta', { property: 'og:description', content: 'Convenient and dependency free wrapper for working with arrays and objects' }],
     ['meta', { property: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { property: 'twitter:url', content: 'https://collect.js.toneflix.net' }],
     ['meta', { property: 'twitter:title', content: 'Collect.js' }],
-    ['meta', { property: 'twitter:image', content: 'https://raw.githubusercontent.com/h3ravel/collect.js/main/collectjs.jpg' }],
+    ['meta', { property: 'twitter:image', content: 'https://raw.githubusercontent.com/h3ravel/collect.js/main/banner.jpg' }],
     ['meta', { property: 'twitter:description', content: 'Convenient and dependency free wrapper for working with arrays and objects' }],
   ],
   themeConfig: {
