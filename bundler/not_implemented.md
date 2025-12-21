@@ -1,4 +1,4 @@
-##### Methods that have not been implemented:
+#### Methods that have not been implemented:
 
 - ~~`containsStrict`~~ use `contains()`
 - ~~`duplicatesStrict`~~ use `duplicates()`

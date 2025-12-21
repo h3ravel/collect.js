@@ -6,7 +6,7 @@
   "typings": "index.d.ts",
   "type": "module",
   "scripts": {
-    "all": "pnpm run build && pnpm test && pnpm run eslint && pnpm run validate-version",
+    "all": "pnpm run barrel && pnpm run build && pnpm test && pnpm run eslint && pnpm run validate-version",
     "lint": "eslint . --ext .ts --ext .js",
     "pretest": "pnpm run transpile",
     "test": "vitest",
@@ -20,12 +20,13 @@
     "eslint:strict": "pnpm run eslint:js && pnpm run eslint:md",
     "eslint:js": "eslint src/ tests/",
     "eslint:md": "eslint --ext md README.md docs/ --rule strict:off --rule no-undef:off --rule no-unused-vars:off --rule func-names:off --rule no-console:off --rule consistent-return:off --rule import/no-unresolved:off --rule import/extensions:off --parser-options sourceType:module",
-    "reporter": "nyc report --reporter=html",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "validate-version": "",
+    "validate-version": "echo 1 >/dev/null",
     "prepublishOnly": "pnpm run all",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "release:patch": "pnpm build && pnpm version patch && git add . && git commit -m \"version: bump console package version\" && pnpm publish --tag latest",
+    "version-patch": "pnpm version patch"
   },
   "repository": {
     "type": "git",
