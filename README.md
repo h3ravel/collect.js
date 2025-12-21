@@ -2944,7 +2944,7 @@ sorted.all();
 
 #### `sortKeysDesc()`
 
-This method has the same signature as the [sortKeys](/api/sortkeys) method, but will sort the collection in the opposite order.
+This method has the same signature as the [sortKeys](/api/sortKeys) method, but will sort the collection in the opposite order.
 
 
 #### `splice()`
