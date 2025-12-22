@@ -6,7 +6,7 @@ hero:
   name: 'Collect.js'
   tagline: 'Convenient and dependency free wrapper for working with arrays and objects.'
   image:
-    src: /banner.jpg
+    src: https://raw.githubusercontent.com/h3ravel/collect.js/main/banner.jpg
     alt: Collect.js
   actions:
     - theme: brand
