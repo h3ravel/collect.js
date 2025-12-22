@@ -33,7 +33,7 @@
     "barrel": "barrelize >/dev/null",
     "coverage": "vitest --coverage",
     "transpile": "tsdown --config-loader unconfig",
-    "readme": "node bundler/bundle.js",
+    "readme": "node documentor/bundle.js",
     "build": "pnpm run transpile && pnpm run readme",
     "eslint": "pnpm eslint:fix",
     "eslint:fix": "pnpm eslint:js --fix && pnpm run eslint:md --fix",

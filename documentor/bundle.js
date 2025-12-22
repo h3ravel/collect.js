@@ -3,14 +3,14 @@
 import { readFileSync, readdirSync, writeFileSync } from 'fs'
 
 // Get all markdown stubs
-const header = readFileSync('bundler/header.md', 'utf-8')
-const badges = readFileSync('bundler/badges.md', 'utf-8')
-const installation = readFileSync('bundler/installation.md', 'utf-8')
-const api = readFileSync('bundler/api.md', 'utf-8')
-const strictnessAndComparisons = readFileSync('bundler/strictness_and_comparisons.md', 'utf-8')
-const notImplemented = readFileSync('bundler/not_implemented.md', 'utf-8')
-const contribute = readFileSync('bundler/contribute.md', 'utf-8')
-const license = readFileSync('bundler/license.md', 'utf-8')
+const header = readFileSync('documentor/header.md', 'utf-8')
+const badges = readFileSync('documentor/badges.md', 'utf-8')
+const installation = readFileSync('documentor/installation.md', 'utf-8')
+const api = readFileSync('documentor/api.md', 'utf-8')
+const strictnessAndComparisons = readFileSync('documentor/strictness_and_comparisons.md', 'utf-8')
+const notImplemented = readFileSync('documentor/not_implemented.md', 'utf-8')
+const contribute = readFileSync('documentor/contribute.md', 'utf-8')
+const license = readFileSync('documentor/license.md', 'utf-8')
 const sourceLink = (name, repo = 'h3ravel/collect.js') => `https://github.com/search?q=repo%3A${repo}%20${name}&type=code`
 
 // Get all API docs
@@ -35,20 +35,10 @@ const methodDocumentation = methods.map((file) => {
 
   content = lines.join('\n')
   content = content.replace(/(\r\n|\r|\n){2,}/g, '$1\n')
+  content = content.replace(/\[View source on GitHub\]\([^)]+\)/g, '')
 
   return content
 }).join('\n\n')
-
-methods.map((file) => {
-  let content = readFileSync(`docs/api/${file}`, 'utf-8')
-
-  content = content.replace(
-    /\[View source on GitHub\]\([^)]+\)/g,
-    `[View source on GitHub](${sourceLink(file.replace('.md', ''))})`
-  )
-
-  writeFileSync(`docs/api/${file}`, content)
-})
 
 writeFileSync(
   'README.md',
@@ -65,3 +55,14 @@ writeFileSync(
     license,
   ].join('\n\n'),
 )
+
+methods.map((file) => {
+  let content = readFileSync(`docs/api/${file}`, 'utf-8')
+
+  content = content.replace(
+    /\[View source on GitHub\]\([^)]+\)/g,
+    `[View source on GitHub](${sourceLink(file.replace('.md', ''))})`
+  )
+
+  writeFileSync(`docs/api/${file}`, content)
+})

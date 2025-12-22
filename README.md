@@ -2634,7 +2634,7 @@ sorted.all();
 // ]
 ```
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/sortBy.js)# `sortBy()`
+# `sortBy()`
 
 The sortBy method sorts the collection by the given key. The sorted collection keeps the original array keys, so in this example we'll use the values method to reset the keys to consecutively numbered indexes:
 
