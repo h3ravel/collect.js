@@ -33,9 +33,13 @@ const methodDocumentation = methods.map((file) => {
   lines.pop()
   lines.pop()
 
+  const linkIndex = lines.findIndex(e => e.includes('View source on GitHub'))
+  if (linkIndex > -1) {
+    delete lines[linkIndex]
+  }
+
   content = lines.join('\n')
   content = content.replace(/(\r\n|\r|\n){2,}/g, '$1\n')
-  content = content.replace(/\[View source on GitHub\]\([^)]+\)/g, '')
 
   return content
 }).join('\n\n')

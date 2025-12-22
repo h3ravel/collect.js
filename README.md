@@ -2634,8 +2634,6 @@ sorted.all();
 // ]
 ```
 
-# `sortBy()`
-
 The sortBy method sorts the collection by the given key. The sorted collection keeps the original array keys, so in this example we'll use the values method to reset the keys to consecutively numbered indexes:
 
 ```js
