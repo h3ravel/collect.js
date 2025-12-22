@@ -29,11 +29,8 @@ export default defineConfig(
         globalIgnores([
             'docs/.vitepress/**',
             'dist/**',
-            '**/dist',
-            '**/dist/**',
+            'build/**',
             'node_modules/**',
-            '**/dist',
-            '**/node_modules'
         ])
     ],
     {
