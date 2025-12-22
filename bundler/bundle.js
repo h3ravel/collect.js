@@ -11,6 +11,7 @@ const strictnessAndComparisons = readFileSync('bundler/strictness_and_comparison
 const notImplemented = readFileSync('bundler/not_implemented.md', 'utf-8')
 const contribute = readFileSync('bundler/contribute.md', 'utf-8')
 const license = readFileSync('bundler/license.md', 'utf-8')
+const sourceLink = (name, repo = 'h3ravel/collect.js') => `https://github.com/search?q=repo%3A${repo}%20${name}&type=code`
 
 // Get all API docs
 const methods = readdirSync('docs/api', 'utf-8')
@@ -37,6 +38,17 @@ const methodDocumentation = methods.map((file) => {
 
   return content
 }).join('\n\n')
+
+methods.map((file) => {
+  let content = readFileSync(`docs/api/${file}`, 'utf-8')
+
+  content = content.replace(
+    /\[View source on GitHub\]\([^)]+\)/g,
+    `[View source on GitHub](${sourceLink(file.replace('.md', ''))})`
+  )
+
+  writeFileSync(`docs/api/${file}`, content)
+})
 
 writeFileSync(
   'README.md',

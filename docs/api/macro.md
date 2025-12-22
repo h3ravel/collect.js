@@ -18,4 +18,4 @@ collection.all();
 
 > Note that the `macro` method returns `undefined`, and therefore it is not possible to use it within a chain of methods.
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/macro.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20macro&type=code)

@@ -14,4 +14,4 @@ multiplied.all();
 
 > Like most other collection methods, `map` returns a new collection instance; it does not modify the collection it is called on. If you want to transform the original collection, use the `transform` method.
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/map.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20map&type=code)

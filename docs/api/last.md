@@ -18,4 +18,4 @@ collect([1, 2, 3, 4]).last();
 // 4
 ```
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/last.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20last&type=code)

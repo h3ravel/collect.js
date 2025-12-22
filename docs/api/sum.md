@@ -35,4 +35,4 @@ const total = collection.sum((product) => product.colors.length);
 // 6
 ```
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/sum.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20sum&type=code)

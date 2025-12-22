@@ -12,4 +12,4 @@ shuffled.all();
 // [3, 5, 1, 2, 4] (generated randomly)
 ```
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/shuffle.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20shuffle&type=code)

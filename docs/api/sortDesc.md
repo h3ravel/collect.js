@@ -14,4 +14,4 @@ sorted.all();
 
 Unlike `sort`, you may not pass a callback to `sortDesc`. If you wish to use a callback, you should use `sort` and invert your comparison.
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/sortDesc.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20sortDesc&type=code)

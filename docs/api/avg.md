@@ -46,4 +46,4 @@ collection.avg((book) => book.pages);
 // 636
 ```
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/avg.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20avg&type=code)

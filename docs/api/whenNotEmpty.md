@@ -31,4 +31,4 @@ collection.all();
 // ];
 ```
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/whenNotEmpty.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20whenNotEmpty&type=code)

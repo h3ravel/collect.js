@@ -19,4 +19,4 @@ You may stop iterating through the items by returning false from the callback:
 collection.eachSpread((name, age) => false);
 ```
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/eachSpread.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20eachSpread&type=code)

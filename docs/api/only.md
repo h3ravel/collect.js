@@ -25,4 +25,4 @@ collect([1, 2, 3, 4]).only([2, 12]).all();
 
 > For the inverse of `only`, see the `except` method.
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/only.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20only&type=code)

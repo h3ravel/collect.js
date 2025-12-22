@@ -14,4 +14,4 @@ subset.all();
 
 > If the callback never returns `false`, the `takeWhile` method will return all items in the collection.
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/takeWhile.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20takeWhile&type=code)

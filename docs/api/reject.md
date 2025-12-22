@@ -12,4 +12,4 @@ const filtered = collection.reject((value) => value > 2);
 
 > For the inverse of the `reject` method, see the `filter` method.
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/reject.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20reject&type=code)

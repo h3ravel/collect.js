@@ -45,4 +45,4 @@ flattened.all();
 
 In this example, calling flatten without providing the depth would have also flattened the nested arrays, resulting in `['iPhone 6S', 'Apple', 'Galaxy S7', 'Samsung']`. Providing a depth allows you to restrict the levels of nested arrays that will be flattened.
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/flatten.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20flatten&type=code)

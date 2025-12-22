@@ -28,4 +28,4 @@ collection.all();
 // => [3, 4, 5]
 ```
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/shift.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20shift&type=code)

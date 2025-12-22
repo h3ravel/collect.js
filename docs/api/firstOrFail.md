@@ -43,4 +43,4 @@ collection.firstOrFail('product', '=', 'Desk');
 // { product: 'Desk', price: 200, discounted: true }
 ```
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/firstOrFail.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20firstOrFail&type=code)

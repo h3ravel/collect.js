@@ -23,4 +23,4 @@ filtered.all();
 
 > When working with nested objects `whereIn()` method allows dot notated keys. E.g. `whereIn('product.categories', ['office-supplies', 'furniture'])`
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/whereIn.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20whereIn&type=code)

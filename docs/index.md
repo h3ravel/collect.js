@@ -5,6 +5,9 @@ layout: home
 hero:
   name: 'Collect.js'
   tagline: 'Convenient and dependency free wrapper for working with arrays and objects.'
+  image:
+    src: /banner.jpg
+    alt: Collect.js
   actions:
     - theme: brand
       text: Get Started →

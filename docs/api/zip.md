@@ -12,4 +12,4 @@ zipped.all();
 // [['Chair', 100], ['Desk', 200]]
 ```
 
-[View source on GitHub](https://github.com/h3ravel/collect.js/blob/main/src/methods/zip.js)
+[View source on GitHub](https://github.com/search?q=repo%3Ah3ravel/collect.js%20zip&type=code)
