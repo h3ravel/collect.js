@@ -16,6 +16,9 @@ export default defineConfig([
     dts: true,
     clean: true,
     minify: true,
+    outputOptions: {
+      keepNames: true
+    },
     external: [
       'fs',
       'os',
@@ -43,6 +46,7 @@ export default defineConfig([
     format: ['iife'],
     outDir: 'build',
     outputOptions: {
+      keepNames: true,
       name: 'collection',
       file: 'build/collect.min.js',
       globals: {
