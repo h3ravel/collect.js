@@ -1,6 +1,6 @@
 {
   "name": "@h3ravel/collect.js",
-  "version": "5.0.5",
+  "version": "5.0.6",
   "description": "Convenient and dependency free wrapper for working with arrays and objects (maintained).",
   "typings": "index.d.ts",
   "type": "module",
