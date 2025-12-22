@@ -37,4 +37,29 @@ export default defineConfig([
       'fs-readdir-recursive',
     ],
   },
+  {
+    treeshake: true,
+    entry: ['src/index.ts'],
+    format: ['iife'],
+    outDir: 'build',
+    outputOptions: {
+      name: 'collection',
+      file: 'build/collect.min.js',
+      globals: {
+        'node:util': 'window',
+      }
+    },
+    footer: 'var Collection=collection.Collection;var collect=collection.collect',
+    dts: false,
+    clean: true,
+    minify: true,
+    platform: 'browser',
+    unbundle: false,
+    external: [
+      /^node:.*/gi,
+      'node:util',
+      'util',
+    ],
+  },
+
 ])
