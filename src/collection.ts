@@ -525,7 +525,7 @@ export class Collection<Item = any> {
     /**
      * The except method returns all items in the collection except for those with the specified keys.
      */
-    except<K> (...args: K[]): Collection<Item> {
+    except<K = Item> (...args: K[]): Collection<Item> {
         const properties = variadic(args)
 
         if (Array.isArray(this.items)) {
@@ -721,7 +721,7 @@ export class Collection<Item = any> {
     /**
      * The forget method removes an item from the collection by its key.
      */
-    forget<K> (key: keyof Item | K): this {
+    forget<K = Item> (key: keyof Item | K): this {
         if (Array.isArray(this.items)) {
             this.items.splice(key as never, 1)
         } else {
@@ -841,7 +841,7 @@ export class Collection<Item = any> {
      * you should pass the key of the attributes you wish to join,
      * and the "glue" string you wish to place between the values.
      */
-    implode<K> (key: keyof Item | K, glue?: string): string {
+    implode<K = Item> (key: keyof Item | K, glue?: string): string {
         if (typeof glue === 'undefined' && Array.isArray(this.items)) {
             return this.items.join(String(key))
         }
@@ -1125,7 +1125,7 @@ export class Collection<Item = any> {
     /**
      * The median method returns the median value of a given key.
      */
-    median<K> (key?: keyof Item | K): number {
+    median<K = Item> (key?: keyof Item | K): number {
         const { length } = this.items
 
         if (key === undefined) {
@@ -1222,7 +1222,7 @@ export class Collection<Item = any> {
     /**
      * The min method returns the minimum value of a given key.
      */
-    min<K> (key?: keyof Item | K): number {
+    min<K = Item> (key?: keyof Item | K): number {
         if (typeof key !== 'undefined') {
             const filtered = this.items.filter(item => item[key as never] !== undefined)
 
@@ -1236,7 +1236,7 @@ export class Collection<Item = any> {
     /**
      * The mode method returns the mode value of a given key.
      */
-    mode<K> (key?: keyof Item | K): Item[] | null {
+    mode<K = Item> (key?: keyof Item | K): Item[] | null {
         const values: any[] = []
         let highestCount = 1
 
@@ -1291,7 +1291,7 @@ export class Collection<Item = any> {
     /**
      * The only method returns the items in the collection with the specified keys.
      */
-    only<K> (...args: K[]): Collection<Item> {
+    only<K = Item> (...args: K[]): Collection<Item> {
         const properties = variadic(args)
 
         if (Array.isArray(this.items)) {
@@ -1532,7 +1532,7 @@ export class Collection<Item = any> {
     /**
      * The pull method removes and returns an item from the collection by its key.
      */
-    pull<K> (key: keyof Item | K, defaultValue?: any): Item | null {
+    pull<K = Item> (key: keyof Item | K, defaultValue?: any): Item | null {
         let returnValue = this.items[key as never] || null
 
         if (!returnValue && typeof defaultValue !== 'undefined') {
@@ -1835,7 +1835,7 @@ export class Collection<Item = any> {
      * @param valueOrFunction 
      * @returns 
      */
-    skipUntil<K> (valueOrFunction: Item | K | ((value: Item) => boolean)): Collection<Item> {
+    skipUntil<K = Item> (valueOrFunction: Item | K | ((value: Item) => boolean)): Collection<Item> {
         let previous: boolean | null = null
         let items
 
@@ -2171,7 +2171,7 @@ export class Collection<Item = any> {
     /**
      * The sum method returns the sum of all items in the collection.
      */
-    sum<K> (key?: keyof Item | K | ((item: Item) => number | string)): number {
+    sum<K = Item> (key?: keyof Item | K | ((item: Item) => number | string)): number {
         const items = getValues(this.items)
 
         let total = 0
@@ -2425,7 +2425,7 @@ export class Collection<Item = any> {
     /**
      * The unique method returns all of the unique items in the collection.
      */
-    unique<K> (key?: keyof Item | K | ((...args: any[]) => any)): Collection<Item> {
+    unique<K = Item> (key?: keyof Item | K | ((...args: any[]) => any)): Collection<Item> {
         let collection: Collection<Item> | Item[]
 
         if (key === undefined) {
@@ -2475,7 +2475,7 @@ export class Collection<Item = any> {
     /**
      * The unwrap method will unwrap the given collection.
      */
-    unwrap<T> (value: T[] | Collection<T>): T[] {
+    unwrap<T = Item> (value: T[] | Collection<T>): T[] {
         if (value instanceof Collection) {
             return value.all() as never
         }
@@ -2486,7 +2486,7 @@ export class Collection<Item = any> {
     /**
      * The values method returns a new collection with the keys reset to consecutive integers.
      */
-    values<T> (): Collection<T> {
+    values<T = Item> (): Collection<T> {
         return new Collection(getValues(this.items))
     }
 
@@ -2561,15 +2561,15 @@ export class Collection<Item = any> {
      */
     when (
         condition: boolean,
-        fn: (collection: Collection<Item>, condition?: boolean) => Collection<Item>,
-        defaultFn?: (collection: Collection<Item>, condition?: boolean) => Collection<Item>
+        fn: (collection: Collection<Item>, condition?: boolean) => Collection<Item> | void | undefined,
+        defaultFn?: (collection: Collection<Item>, condition?: boolean) => Collection<Item> | void | undefined
     ): Collection<Item> {
         if (condition) {
-            return fn(this, condition)
+            return fn(this, condition) ?? this
         }
 
         if (defaultFn) {
-            return defaultFn(this, condition)
+            return defaultFn(this, condition) ?? this
         }
 
         return this
@@ -2767,7 +2767,7 @@ export class Collection<Item = any> {
      * @param key 
      * @returns 
      */
-    whereNull<K> (key: keyof Item | K | null | undefined = null) {
+    whereNull<K = Item> (key: keyof Item | K | null | undefined = null) {
         return this.where(key, '===', null)
     }
 
