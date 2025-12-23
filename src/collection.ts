@@ -115,7 +115,7 @@ export class Collection<Item = any> {
     /**
      * The combine method combines the keys of the collection with the values of another array or collection.
      */
-    combine<T, U> (array: U[] | Collection): Collection<T> {
+    combine<U, T = Item> (array: U[] | Collection): Collection<T> {
         let values = array
 
         if (values instanceof Collection) {
@@ -147,7 +147,7 @@ export class Collection<Item = any> {
     /**
      * The concat method is used to merge two or more collections/arrays/objects.
      */
-    concat<T> (collectionOrArrayOrObject: T[] | Record<string, T> | Collection<T>): any {
+    concat<T = Item> (collectionOrArrayOrObject: T[] | Record<string, T> | Collection<T>): any {
         let list: T[]
 
         if (collectionOrArrayOrObject instanceof Collection) {
@@ -179,7 +179,7 @@ export class Collection<Item = any> {
      * @param value 
      * @returns 
      */
-    contains<K, V> (key: keyof Item | K | ((...args: any[]) => any), value?: V): boolean {
+    contains<V, K = Item> (key: keyof Item | K | ((...args: any[]) => any), value?: V): boolean {
         if (typeof value !== 'undefined') {
             if (Array.isArray(this.items)) {
                 return this.items
@@ -244,7 +244,7 @@ export class Collection<Item = any> {
     /**
      * The crossJoin method cross joins the collection with the given array or collection, returning all possible permutations.
      */
-    crossJoin<T> (...values: (T[] | Collection)[]): Collection<[Item, T]> {
+    crossJoin<T = Item> (...values: (T[] | Collection)[]): Collection<[Item, T]> {
         function join (collection: any[], ...args: any[]) {
             let current = args[0]
 
@@ -289,7 +289,7 @@ export class Collection<Item = any> {
      * The diff method compares the collection against another collection or a plain array based on its values.
      * This method will return the values in the original collection that are not present in the given collection.
      */
-    diff<T> (values: T[] | Collection<Item>): Collection<Item> {
+    diff<T = Item> (values: T[] | Collection<Item>): Collection<Item> {
         let valuesToDiff: T[] | Item[]
 
         if (values instanceof Collection) {
@@ -309,7 +309,7 @@ export class Collection<Item = any> {
      * and values. This method will return the key / value pairs in the original collection that are not present in
      * the given collection:
      */
-    diffAssoc<T> (values: T[] | Collection<T>): Collection<Item> {
+    diffAssoc<T = Item> (values: T[] | Collection<T>): Collection<Item> {
         let diffValues: any = values
 
         if (values instanceof Collection) {
@@ -358,7 +358,7 @@ export class Collection<Item = any> {
      * @param object 
      * @returns 
      */
-    diffUsing<T> (values: T[] | Collection<Item>, callback: (item: Item, otherItem: Item) => any) {
+    diffUsing<T = Item> (values: T[] | Collection<Item>, callback: (item: Item, otherItem: Item) => any) {
         let items: Item[] | [string, Item][]
 
         if (Array.isArray(this.items)) {
@@ -633,7 +633,7 @@ export class Collection<Item = any> {
      * @param value 
      * @returns 
      */
-    firstWhere<K, V> (key?: keyof Item, operator?: Operator | K, value?: V | null | undefined) {
+    firstWhere<V, K = Item> (key?: keyof Item, operator?: Operator | K, value?: V | null | undefined) {
         return this.where(key, operator, value).first()
     }
 
@@ -642,7 +642,7 @@ export class Collection<Item = any> {
      * The callback is free to modify the item and return it, thus forming a new collection of modified items.
      * Then, the array is flattened by a level.
      */
-    flatMap<T> (fn: (item: Item, key: any) => T): Collection<T> {
+    flatMap<T = Item> (fn: (item: Item, key: any) => T): Collection<T> {
         return this.map(fn).collapse()
     }
 
@@ -758,7 +758,7 @@ export class Collection<Item = any> {
     /**
      * The get method returns the item at a given key. If the key does not exist, null is returned.
      */
-    get<K, V> (key: keyof Item | K, defaultValue?: ((...any: any[]) => V | Item) | V | Item) {
+    get<V, K = Item> (key: keyof Item | K, defaultValue?: ((...any: any[]) => V | Item) | V | Item) {
         if (typeof this.items[key as never] !== 'undefined') {
             return this.items[key as never]
         }
@@ -778,7 +778,7 @@ export class Collection<Item = any> {
      * The groupBy method groups the collection's items by a given key.
      *
      */
-    groupBy<T, K> (key: ((item: Item, index?: number) => K) | keyof Item | K): Collection<T> {
+    groupBy<K, T = Item> (key: ((item: Item, index?: number) => K) | keyof Item | K): Collection<T> {
         const collection: GenericObj = {}
 
         if (Array.isArray(this.items)) {
@@ -942,7 +942,7 @@ export class Collection<Item = any> {
      * The keyBy method keys the collection by the given key.
      * If multiple items have the same key, only the last one will appear in the new collection.
      */
-    keyBy<T, K> (key: keyof Item | K | ((...args: any[]) => any)): Collection<T> {
+    keyBy<K, T = Item> (key: keyof K | ((...args: any[]) => any)): Collection<T> {
         const collection: GenericObj = {}
 
         if (isFunction(key)) {
@@ -1013,7 +1013,7 @@ export class Collection<Item = any> {
      * @param items 
      * @returns 
      */
-    make<T> (items = []): Collection<T> {
+    make<T = Item> (items = []): Collection<T> {
         return new Collection<T>(items)
     }
 
@@ -1021,7 +1021,7 @@ export class Collection<Item = any> {
      * The map method iterates through the collection and passes each value to the given callback.
      * The callback is free to modify the item and return it, thus forming a new collection of modified items.
      */
-    map<T> (fn: (items: Item, index: any, key?: any) => T): Collection<T> {
+    map<T = Item> (fn: (items: Item, index: any, key?: any) => T): Collection<T> {
         if (Array.isArray(this.items)) {
             return new Collection(this.items.map(fn))
         }
@@ -1089,7 +1089,7 @@ export class Collection<Item = any> {
      * The callback should return an array where the first element represents the key
      * and the second element represents the value pair.
      */
-    mapWithKeys<T> (fn: (item: Item, index: number | string) => [string, any]): Collection<T> {
+    mapWithKeys<T = Item> (fn: (item: Item, index: number | string) => [string, any]): Collection<T> {
         const collection: GenericObj = {}
 
         if (Array.isArray(this.items)) {
@@ -1151,7 +1151,7 @@ export class Collection<Item = any> {
      * @param value 
      * @returns 
      */
-    merge<T> (value: GenericObj | T[]): Collection<T> {
+    merge<T = Item> (value: GenericObj | T[]): Collection<T> {
         let arrayOrObject: GenericObj = value
 
         if (typeof arrayOrObject === 'string') {
@@ -1396,7 +1396,7 @@ export class Collection<Item = any> {
     /**
      * The pluck method retrieves all of the values for a given key.
      */
-    pluck<T, K, V> (value: keyof Item | V, key?: keyof Item | K): Collection<T> {
+    pluck<K, V, T = Item> (value: keyof Item | V, key?: keyof K): Collection<T> {
         if ((value as string).indexOf('*') !== -1) {
             const keyPathMap = buildKeyPathMap(this.items as never)
 
@@ -1519,7 +1519,7 @@ export class Collection<Item = any> {
     /**
      * The prepend method adds an item to the beginning of the collection.
      */
-    prepend<K, V> (value: V, key?: K): this {
+    prepend<V, K = Item> (value: V, key?: K): this {
         if (typeof key !== 'undefined') {
             return this.put(key, value)
         }
@@ -1561,7 +1561,7 @@ export class Collection<Item = any> {
     /**
      * The put method sets the given key and value in the collection.
      */
-    put<K, V> (key: K, value: V): this {
+    put<V, K = Item> (key: K, value: V): this {
         this.items[key as never] = value as never
 
         return this
@@ -1587,7 +1587,7 @@ export class Collection<Item = any> {
      * The reduce method reduces the collection to a single value,
      * passing the result of each iteration into the subsequent iteration.
      */
-    reduce<T> (fn: (_carry?: T | null, item?: Item, index?: number | string) => T, carry?: T): any {
+    reduce<T = Item> (fn: (_carry?: T | null, item?: Item, index?: number | string) => T, carry?: T): any {
         let reduceCarry: T | null | undefined = null
 
         if (typeof carry !== 'undefined') {
@@ -1927,7 +1927,7 @@ export class Collection<Item = any> {
         return new Collection(collection)
     }
 
-    sole<K, V> (key?: keyof Item | K | ((val: Item) => any), operator?: Operator | K, value?: V) {
+    sole<V, K = Item> (key?: keyof Item | K | ((val: Item) => any), operator?: Operator | K, value?: V) {
         let collection
 
         if (isFunction(key)) {
@@ -2387,7 +2387,7 @@ export class Collection<Item = any> {
      * The transform method iterates over the collection and calls the given callback with each item in the collection.
      * The items in the collection will be replaced by the values returned by the callback.
      */
-    transform<T> (fn: (item: Item, key?: number) => T): this {
+    transform<T = Item> (fn: (item: Item, key?: number) => T): this {
         if (Array.isArray(this.items)) {
             this.items = this.items.map(fn) as never
         } else {
@@ -2409,7 +2409,7 @@ export class Collection<Item = any> {
      * If the given array contains keys that are already in the original collection,
      * the original collection's values will be preferred.
      */
-    union<T> (object: GenericObj): Collection<T> {
+    union<T = Item> (object: GenericObj): Collection<T> {
         const collection: GenericObj = JSON.parse(JSON.stringify(this.items))
 
         Object.keys(object).forEach((prop) => {
@@ -2632,9 +2632,9 @@ export class Collection<Item = any> {
     /**
      * The where method filters the collection by a given key / value pair.
     */
-    where<K, V> (key: keyof Item | K, value: V): Collection<Item>
-    where<K, V> (key?: keyof Item | K, operator?: Operator | K, value?: V | null | undefined): Collection<Item>
-    where<K, V> (key?: keyof Item | K, operator?: Operator | K, value?: V | null | undefined): Collection<Item> {
+    where<V, K = Item> (key: keyof Item | K, value: V): Collection<Item>
+    where<V, K = Item> (key?: keyof Item | K, operator?: Operator | K, value?: V | null | undefined): Collection<Item>
+    where<V, K = Item> (key?: keyof Item | K, operator?: Operator | K, value?: V | null | undefined): Collection<Item> {
         let comparisonOperator = operator
         let comparisonValue: Operator | V | K = value!
 
@@ -2700,14 +2700,14 @@ export class Collection<Item = any> {
      * @param values 
      * @returns 
      */
-    whereBetween<K, V> (key: keyof Item | K, values: V[]): Collection<Item> {
+    whereBetween<V, K = Item> (key: keyof Item | K, values: V[]): Collection<Item> {
         return this.where(key, '>=', values[0]).where(key, '<=', values[values.length - 1])
     }
 
     /**
      * The whereIn method filters the collection by a given key / value contained within the given array.
      */
-    whereIn<K, V> (key: keyof Item | K, values: V[]): Collection<Item> {
+    whereIn<V, K = Item> (key: keyof Item | K, values: V[]): Collection<Item> {
         const items = getValues(values)
 
         const collection = this.items
@@ -2733,7 +2733,7 @@ export class Collection<Item = any> {
      * @param values 
      * @returns 
      */
-    whereNotBetween<K, V> (key: keyof Item | K, values: V[]): Collection<Item> {
+    whereNotBetween<V, K = Item> (key: keyof Item | K, values: V[]): Collection<Item> {
         return this.filter(item => (
             nestedValue(item, key as string) < values[0] || nestedValue(item, key as string) > values[values.length - 1]
         ))
@@ -2742,7 +2742,7 @@ export class Collection<Item = any> {
     /**
      * The whereNotIn method filters the collection by a given key / value not contained within the given array.
      */
-    whereNotIn<K, V> (key: keyof Item | K, values: V[]): Collection<Item> {
+    whereNotIn<V, K = Item> (key: keyof Item | K, values: V[]): Collection<Item> {
         const items = getValues(values)
 
         const collection = this.items
@@ -2774,7 +2774,7 @@ export class Collection<Item = any> {
     /**
      * The wrap method will wrap the given value in a collection.
      */
-    wrap<T> (value: T | T[] | Collection<T>): Collection<T> {
+    wrap<T = Item> (value: T | T[] | Collection<T>): Collection<T> {
         if (value instanceof Collection) {
             return value
         }
@@ -2790,7 +2790,7 @@ export class Collection<Item = any> {
      * The zip method merges together the values of the given array with the values
      * of the original collection at the corresponding index.
      */
-    zip<T> (array: T[] | Collection): Collection<[Item, T]> {
+    zip<T = Item> (array: T[] | Collection): Collection<[Item, T]> {
         const items = Array.isArray(this.items) ? this.items : Object.values(this.items)
         let values = array
 
