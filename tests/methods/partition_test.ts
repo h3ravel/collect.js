@@ -14,7 +14,7 @@ export default (it: TestAPI, expect: ExpectStatic) => {
       collect([1, 2]),
       collect([3, 4, 5, 6]),
     ])
-    expect(arr.first().all()).to.eql([1, 2])
+    expect(arr.first()?.all()).to.eql([1, 2])
     expect(collection.all()).to.eql([1, 2, 3, 4, 5, 6])
   })
 

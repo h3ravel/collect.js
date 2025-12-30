@@ -1355,7 +1355,13 @@ export class Collection<Item = any> {
      * The partition method may be combined with destructuring to separate elements
      * that pass a given truth test from those that do not.
      */
-    partition (fn: (item: Item) => boolean): [Item[], Item[]] {
+    partition<T = Item> (fn: (item: Item) => boolean):
+        T extends any[]
+        ? Collection<Collection<T>>
+        : T extends Record<string, any>
+        ? Collection<Collection<Record<string, T>>>
+        : Collection<Collection<T>
+        > {
         let arrays: [Collection<Item>, Collection<Item>]
 
         if (Array.isArray(this.items)) {
