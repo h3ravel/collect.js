@@ -43,7 +43,7 @@ export class Collection<Item = any> {
     /**
      * The all method returns the underlying array represented by the collection.
      */
-    all (): Item[] {
+    all (): Item extends Record<string, any> ? Item : Item[] {
         return this.items as never
     }
 
@@ -293,7 +293,7 @@ export class Collection<Item = any> {
         let valuesToDiff: T[] | Item[]
 
         if (values instanceof Collection) {
-            valuesToDiff = values.all()
+            valuesToDiff = values.all() as never
         } else {
             valuesToDiff = values
         }
@@ -981,7 +981,7 @@ export class Collection<Item = any> {
         let { items } = this
 
         if (isFunction(fn)) {
-            items = this.filter(fn).all()
+            items = this.filter(fn).all() as never
         }
 
         if ((Array.isArray(items) && !items.length) || (!Object.keys(items).length)) {
@@ -2145,7 +2145,7 @@ export class Collection<Item = any> {
     splice (index: number, limit: number, replace?: Item[]): Collection<Item> {
         const slicedCollection = this.slice(index, limit)
 
-        this.items = this.diff(slicedCollection.all() as never).all()
+        this.items = this.diff(slicedCollection.all() as never).all() as never
 
         if (Array.isArray(replace)) {
             for (let iterator = 0, { length } = replace;
