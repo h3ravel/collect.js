@@ -566,7 +566,7 @@ export class Collection<Item = any> {
     /**
      * The first method returns the first element in the collection that passes a given truth test.
      */
-    first<V> (fn?: (item: Item, key: any) => boolean, defaultValue?: ((...any: any[]) => V | Item) | V | Item): Collection<Item> | undefined {
+    first (fn?: (item: Item, key: any) => boolean, defaultValue?: ((...any: any[]) => any) | any): Item | undefined {
         if (isFunction(fn)) {
             const keys = Object.keys(this.items)
 
@@ -575,32 +575,32 @@ export class Collection<Item = any> {
                 const item = this.items[key as never]
 
                 if (fn(item, key)) {
-                    return item as never
+                    return item
                 }
             }
 
             if (isFunction(defaultValue)) {
-                return defaultValue() as never
+                return defaultValue()
             }
 
-            return defaultValue as never
+            return defaultValue
         }
 
         if ((Array.isArray(this.items) && this.items.length) || (Object.keys(this.items).length)) {
             if (Array.isArray(this.items)) {
-                return this.items[0] as never
+                return this.items[0]
             }
 
             const firstKey = Object.keys(this.items)[0]
 
-            return this.items[firstKey] as never
+            return this.items[firstKey]
         }
 
         if (isFunction(defaultValue)) {
-            return defaultValue() as never
+            return defaultValue()
         }
 
-        return defaultValue as never
+        return defaultValue
     }
 
     /**
@@ -778,7 +778,7 @@ export class Collection<Item = any> {
      * The groupBy method groups the collection's items by a given key.
      *
      */
-    groupBy<K, T = Item> (key: ((item: Item, index?: number) => K) | keyof Item | K): Collection<T> {
+    groupBy<K> (key: ((item: Item, index?: number) => K) | keyof Item | K): Collection<Collection<Item>> {
         const collection: GenericObj = {}
 
         if (Array.isArray(this.items)) {

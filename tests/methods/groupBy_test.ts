@@ -45,7 +45,7 @@ export default (it: TestAPI, expect: ExpectStatic) => {
     const collection = collect(products)
     const grouped = collection.groupBy('manufacturer')
 
-    expect(grouped.first().all()).to.eql([
+    expect(grouped.first()?.all()).to.eql([
       { product: 'Catalog', manufacturer: 'IKEA', price: 0 },
       { product: 'Desk', manufacturer: 'IKEA', price: 60 },
       { product: 'Chair', manufacturer: 'IKEA', price: 60 },
