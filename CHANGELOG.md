@@ -1,9 +1,32 @@
+# 5.3.1
+
+## Features
+
+- add static `wrap` method for value wrapping in Collection class
+- add static `enumerable` method for enumerable check
+
+## Bug Fixs
+
+- update return type of `first` method and improve `groupBy` test for optional chaining
+
+# 5.2.1
+
+## Features
+
+- enhance partition method type inference
+
+# 5.1.0
+
+## Style
+
+- make all generic keys <T> = to Item by default
+
 # 5.0.0
 
 ## Features
 
 - Merge all open PR from [Parent Repo](https://github.com/ecrmnn/collect.js)
-- Rewrite library in Typescript and ES5
+- Rewrite library in Typescript and ES6
 
 # 4.19.0
 

@@ -20,8 +20,8 @@ features:
     details: Want to customize? Collect.js can be extended using macros.
   - title: ❤️ Collect.js + Laravel
     details: A match made in heaven. Collect.js offers an identical api to Laravel collections.
-  - title: 🧩 TypeScript & ES5 Ready
-    details: Rewritten from the ground up in TypeScript, with ES5 output for maximum compatibility.
+  - title: 🧩 TypeScript & ES6 Ready
+    details: Rewritten from the ground up in TypeScript, with ES6 output for maximum compatibility.
   - title: ⚡ Lightweight & Dependency-Free
     details: Zero dependencies, minimal footprint, and fast execution in any environment.
   - title: 🔁 Chainable Operations
