@@ -2389,6 +2389,10 @@ export class Collection<Item = any> {
         return this.items
     }
 
+    protected static enumerable<X = any> (value: X): value is X & { length: number } {
+        return value != null && typeof (value as any).length === 'number'
+    }
+
     /**
      * The transform method iterates over the collection and calls the given callback with each item in the collection.
      * The items in the collection will be replaced by the values returned by the callback.
@@ -2790,6 +2794,17 @@ export class Collection<Item = any> {
         }
 
         return new Collection([value])
+    }
+
+    /**
+     * Wrap the given value in a collection if applicable.
+     *
+     * @param  value
+     */
+    static wrap<T> (value: T) {
+        return this.enumerable(value)
+            ? new Collection<T>(value)
+            : new Collection<T>(Array.isArray(value) ? value : [value])
     }
 
     /**
