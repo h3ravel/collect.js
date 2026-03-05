@@ -1,8 +1,7 @@
 'use strict'
 
+import { Collection, collect } from '../../src/collection'
 import { ExpectStatic, TestAPI } from 'vitest'
-
-import { collect } from '../../src/collection'
 
 export default (it: TestAPI, expect: ExpectStatic) => {
   it('should return all items, simple array', () => {
@@ -56,6 +55,54 @@ export default (it: TestAPI, expect: ExpectStatic) => {
     expect(all).to.have.property('fn')
     expect(all.fn).to.be.instanceOf(Function)
     expect(all.fn()).to.eql(4)
+  })
+
+  it('should infer all() return type when collection is initialized with make()', () => {
+    const objCollection = Collection.make({ name: 'Darwin Núñez' })
+    const all = objCollection.all()
+    const typedAll: { name: string } = all
+
+    expect(typedAll).to.have.property('name')
+    expect(typedAll.name).to.eql('Darwin Núñez')
+
+    const arrayCollection = Collection.make([{ id: 1 }, { id: 2 }])
+    const arrayAll = arrayCollection.all()
+    const typedArrayAll: { id: number }[] = arrayAll
+
+    expect(typedArrayAll).to.have.length(2)
+    expect(typedArrayAll[0].id).to.eql(1)
+  })
+
+  it('should infer all() return type when collection is initialized with new Collection()', () => {
+    const arrayCollection = new Collection([{ id: 1 }, { id: 2 }])
+    const arrayAll = arrayCollection.all()
+    const typedArrayAll: { id: number }[] = arrayAll
+
+    expect(typedArrayAll).to.have.length(2)
+    expect(typedArrayAll[0].id).to.eql(1)
+
+    const objectCollection = new Collection({ id: 1, na: 2 })
+    const objectAll = objectCollection.all()
+    const typedObjectAll: { id: number, na: number } = objectAll
+
+    expect(typedObjectAll).to.have.property('id')
+    expect(typedObjectAll.id).to.eql(1)
+  })
+
+  it('should infer all() return type when collection is initialized with instance make()', () => {
+    const arrayCollection = new Collection().make([{ id: 1 }, { id: 2 }])
+    const arrayAll = arrayCollection.all()
+    const typedArrayAll: { id: number }[] = arrayAll
+
+    expect(typedArrayAll).to.have.length(2)
+    expect(typedArrayAll[0].id).to.eql(1)
+
+    const objectCollection = new Collection().make({ id: 1, na: 2 })
+    const objectAll = objectCollection.all()
+    const typedObjectAll: { id: number, na: number } = objectAll
+
+    expect(typedObjectAll).to.have.property('id')
+    expect(typedObjectAll.id).to.eql(1)
   })
 
   it('should infer all() return type based on provided collection value', () => {

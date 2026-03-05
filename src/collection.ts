@@ -13,16 +13,16 @@ import variadic from './utilities/variadic'
 type Operator = '===' | '==' | '!==' | '!=' | '<>' | '>' | '<' | '>=' | '<=' | boolean
 type GenericObj<X = any> = Record<string, X>
 
-export class Collection<Item = any, AllResult = Item extends Record<string, any> ? Item : Item[]> {
+export class Collection<Item = any, AllResult = any> {
     private items: Item[]
 
     /**
      * 
      * @param collection 
      */
-    constructor(collection?: Record<string, Item> | Item[] | Item) {
+    constructor(collection?: Record<string, Item> | Item[] | Item | AllResult) {
         if (collection !== undefined && !Array.isArray(collection) && typeof collection !== 'object') {
-            this.items = [collection]
+            this.items = [collection as Item]
         } else if (collection instanceof Collection) {
             this.items = collection.all()
         } else {
@@ -1013,8 +1013,24 @@ export class Collection<Item = any, AllResult = Item extends Record<string, any>
      * @param items 
      * @returns 
      */
-    make<T = Item> (items = []): Collection<T> {
-        return new Collection<T>(items)
+    make<Item> (items: Item[]): Collection<Item, Item[]>
+    make<Item extends Record<string, any>> (items: Item): Collection<Item[keyof Item], Item>
+    make<Item = any> (items?: Record<string, Item> | Item[] | Item): Collection<Item>
+    make<Item = any> (items: Record<string, Item> | Item[] | Item = [] as Item[]) {
+        return new Collection(items)
+    }
+
+    /**
+     * The make method will make a new collection from nothing
+     * 
+     * @param items 
+     * @returns 
+     */
+    static make<Item> (items: Item[]): Collection<Item, Item[]>
+    static make<Item extends Record<string, any>> (items: Item): Collection<Item[keyof Item], Item>
+    static make<Item = any> (items?: Record<string, Item> | Item[] | Item): Collection<Item>
+    static make<Item = any> (items?: Record<string, Item> | Item[] | Item) {
+        return new Collection(items)
     }
 
     /**
@@ -1179,7 +1195,7 @@ export class Collection<Item = any, AllResult = Item extends Record<string, any>
      * @param items 
      * @returns 
      */
-    mergeRecursive (items: GenericObj | Collection): Collection<Item, AllResult> {
+    mergeRecursive (items: GenericObj | Collection): Collection<Item> {
         const merge = (target: GenericObj, source: GenericObj) => {
             const merged: GenericObj = {}
 
