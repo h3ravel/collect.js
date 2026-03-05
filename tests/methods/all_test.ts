@@ -57,4 +57,20 @@ export default (it: TestAPI, expect: ExpectStatic) => {
     expect(all.fn).to.be.instanceOf(Function)
     expect(all.fn()).to.eql(4)
   })
+
+  it('should infer all() return type based on provided collection value', () => {
+    const arrayCollection = collect([{ id: 1 }, { id: 2 }])
+    const arrayAll = arrayCollection.all()
+    const typedArrayAll: { id: number }[] = arrayAll
+
+    expect(typedArrayAll).to.have.length(2)
+    expect(typedArrayAll[0].id).to.eql(1)
+
+    const objectCollection = collect({ id: 1, na: 2 })
+    const objectAll = objectCollection.all()
+    const typedObjectAll: { id: number, na: number } = objectAll
+
+    expect(typedObjectAll).to.have.property('id')
+    expect(typedObjectAll.id).to.eql(1)
+  })
 }

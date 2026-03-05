@@ -13,7 +13,7 @@ import variadic from './utilities/variadic'
 type Operator = '===' | '==' | '!==' | '!=' | '<>' | '>' | '<' | '>=' | '<=' | boolean
 type GenericObj<X = any> = Record<string, X>
 
-export class Collection<Item = any> {
+export class Collection<Item = any, AllResult = Item extends Record<string, any> ? Item : Item[]> {
     private items: Item[]
 
     /**
@@ -43,8 +43,8 @@ export class Collection<Item = any> {
     /**
      * The all method returns the underlying array represented by the collection.
      */
-    all (): Item extends Record<string, any> ? Item : Item[] {
-        return this.items as never
+    all (): AllResult {
+        return this.items as AllResult
     }
 
     /**
@@ -1179,7 +1179,7 @@ export class Collection<Item = any> {
      * @param items 
      * @returns 
      */
-    mergeRecursive (items: GenericObj | Collection): Collection<Item> {
+    mergeRecursive (items: GenericObj | Collection): Collection<Item, AllResult> {
         const merge = (target: GenericObj, source: GenericObj) => {
             const merged: GenericObj = {}
 
@@ -1318,7 +1318,7 @@ export class Collection<Item = any> {
      * @param value 
      * @returns 
      */
-    pad (size: number, value: number): Collection<Item> {
+    pad (size: number, value: number): Collection<Item, AllResult> {
         const abs = Math.abs(size)
         const count = this.count()
 
@@ -1347,7 +1347,7 @@ export class Collection<Item = any> {
             iterator += 1
         }
 
-        return new Collection<Item>(items)
+        return new Collection<Item, AllResult>(items)
     }
 
 
@@ -1655,7 +1655,7 @@ export class Collection<Item = any> {
      * @param items 
      * @returns 
      */
-    replaceRecursive (items: Item[] | Collection | GenericObj): Collection<Item> {
+    replaceRecursive (items: Item[] | Collection | GenericObj): Collection<Item, AllResult> {
 
         const replace = (target: GenericObj, source: GenericObj) => {
             const replaced = { ...target }
@@ -1694,14 +1694,14 @@ export class Collection<Item = any> {
         }
 
         if (!Array.isArray(items) && typeof items !== 'object') {
-            return new Collection<Item>(replace(this.items, [items]))
+            return new Collection<Item, AllResult>(replace(this.items, [items]))
         }
 
         if (items instanceof Collection) {
-            return new Collection<Item>(replace(this.items, items.all()))
+            return new Collection<Item, AllResult>(replace(this.items, items.all()))
         }
 
-        return new Collection<Item>(replace(this.items, items))
+        return new Collection<Item, AllResult>(replace(this.items, items))
     }
 
 
@@ -2324,7 +2324,7 @@ export class Collection<Item = any> {
      * allowing you to "tap" into the collection at a specific point
      * and do something with the items while not affecting the collection itself.
      */
-    tap (fn: (collection: Collection<Item>) => void): this {
+    tap (fn: (collection: Collection<Item, AllResult>) => void): this {
         fn(this)
 
         return this
@@ -2470,9 +2470,9 @@ export class Collection<Item = any> {
      */
     unless (
         condition: boolean,
-        fn: (collection: Collection<Item>) => Collection<Item>,
-        defaultFn?: (collection: Collection<Item>) => Collection<Item>
-    ): Collection<Item> {
+        fn: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>,
+        defaultFn?: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>
+    ): Collection<Item, AllResult> {
         if (!condition) {
             return fn(this)
         } else if (defaultFn) {
@@ -2504,7 +2504,7 @@ export class Collection<Item = any> {
      * 
      * @returns 
      */
-    undot (): Collection<Item> {
+    undot (): Collection<Item, AllResult> {
         if (Array.isArray(this.items)) {
             return this
         }
@@ -2533,7 +2533,7 @@ export class Collection<Item = any> {
             }
         })
 
-        return new Collection<Item>(collection)
+        return new Collection<Item, AllResult>(collection)
     }
 
     /**
@@ -2545,8 +2545,8 @@ export class Collection<Item = any> {
      * @returns 
      */
     unlessEmpty (
-        fn: (collection: Collection<Item>) => Collection<Item>,
-        defaultFn?: (collection: Collection<Item>) => Collection<Item>
+        fn: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>,
+        defaultFn?: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>
     ) {
         return this.whenNotEmpty(fn, defaultFn)
     }
@@ -2560,8 +2560,8 @@ export class Collection<Item = any> {
      * @returns 
      */
     unlessNotEmpty (
-        fn: (collection: Collection<Item>) => Collection<Item>,
-        defaultFn?: (collection: Collection<Item>) => Collection<Item>
+        fn: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>,
+        defaultFn?: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>
     ) {
         return this.whenEmpty(fn, defaultFn)
     }
@@ -2571,9 +2571,9 @@ export class Collection<Item = any> {
      */
     when (
         condition: boolean,
-        fn: (collection: Collection<Item>, condition?: boolean) => Collection<Item> | void | undefined,
-        defaultFn?: (collection: Collection<Item>, condition?: boolean) => Collection<Item> | void | undefined
-    ): Collection<Item> {
+        fn: (collection: Collection<Item, AllResult>, condition?: boolean) => Collection<Item, AllResult> | void | undefined,
+        defaultFn?: (collection: Collection<Item, AllResult>, condition?: boolean) => Collection<Item, AllResult> | void | undefined
+    ): Collection<Item, AllResult> {
         if (condition) {
             return fn(this, condition) ?? this
         }
@@ -2592,8 +2592,8 @@ export class Collection<Item = any> {
      * @returns 
      */
     whenEmpty (
-        fn: (collection: Collection<Item>) => Collection<Item>,
-        defaultFn?: (collection: Collection<Item>) => Collection<Item>
+        fn: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>,
+        defaultFn?: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>
     ) {
         if (Array.isArray(this.items) && !this.items.length) {
             return fn(this)
@@ -2619,8 +2619,8 @@ export class Collection<Item = any> {
      * @returns 
      */
     whenNotEmpty (
-        fn: (collection: Collection<Item>) => Collection<Item>,
-        defaultFn?: (collection: Collection<Item>) => Collection<Item>
+        fn: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>,
+        defaultFn?: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>
     ) {
         if (Array.isArray(this.items) && this.items.length) {
             return fn(this)
@@ -2842,4 +2842,9 @@ export class Collection<Item = any> {
     }
 }
 
-export const collect = <Item = any> (collection?: Record<string, Item> | Item[] | Item) => new Collection(collection)
+export function collect<Item> (collection: Item[]): Collection<Item, Item[]>
+export function collect<Item extends Record<string, any>> (collection: Item): Collection<Item[keyof Item], Item>
+export function collect<Item = any> (collection?: Record<string, Item> | Item[] | Item): Collection<Item>
+export function collect<Item = any> (collection?: Record<string, Item> | Item[] | Item) {
+    return new Collection(collection)
+}
