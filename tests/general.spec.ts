@@ -4,10 +4,8 @@ import { readFileSync, readdirSync } from 'node:fs'
 
 import path from 'node:path'
 
-let test = process.argv[process.argv.length - 1]
+const test = process.argv[process.argv.length - 1]
 const runSingleTest = test.indexOf('--') !== -1
-test = test.replace('--', '')
-test += '_test.js'
 
 const tests = readdirSync(path.join(process.cwd(), './tests/methods'))
 const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(new Collection()))

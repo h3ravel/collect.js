@@ -17,28 +17,30 @@ export default defineConfig([
     clean: true,
     minify: true,
     outputOptions: {
-      keepNames: true
+      keepNames: true,
     },
-    external: [
-      'fs',
-      'os',
-      'tsx',
-      'path',
-      'tsdown',
-      'dotenv',
-      'crypto',
-      'rollup',
-      'esbuild',
-      'edge.js',
-      'nodemailer',
-      'typescript',
-      'chalk',
-      'commander',
-      /^@h3ravel\/.*/gi,
-      /^node:.*/gi,
-      /.*\/promises$/gi,
-      'fs-readdir-recursive',
-    ],
+    deps: {
+      neverBundle: [
+        'fs',
+        'os',
+        'tsx',
+        'path',
+        'tsdown',
+        'dotenv',
+        'crypto',
+        'rollup',
+        'esbuild',
+        'edge.js',
+        'nodemailer',
+        'typescript',
+        'chalk',
+        'commander',
+        /^@h3ravel\/.*/gi,
+        /^node:.*/gi,
+        /.*\/promises$/gi,
+        'fs-readdir-recursive',
+      ],
+    }
   },
   {
     treeshake: true,
@@ -59,11 +61,13 @@ export default defineConfig([
     minify: true,
     platform: 'browser',
     unbundle: false,
-    external: [
-      /^node:.*/gi,
-      'node:util',
-      'util',
-    ],
+    deps: {
+      neverBundle: [
+        /^node:.*/gi,
+        'node:util',
+        'util',
+      ],
+    }
   },
 
 ])

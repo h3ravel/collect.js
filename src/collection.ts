@@ -553,6 +553,7 @@ export class Collection<Item = any, AllResult = any> {
     filter (fn: (item: Item) => boolean): Collection<Item>;
     filter (fn: (item: Item, key?: any) => boolean): Collection<Item> {
         const func = fn || false
+        // eslint-disable-next-line no-useless-assignment
         let filteredItems = null
         if (Array.isArray(this.items)) {
             filteredItems = filterArray(func, this.items)

@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "dist-old",
     "paths": {
-      "@h3ravel/collection": ["src/index.js"]
+      "@h3ravel/collection": ["./src/index.js"]
     },
+    "types": ["node"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "target": "es2022",
