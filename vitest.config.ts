@@ -8,6 +8,11 @@ export default defineConfig({
     environment: 'node',
     root: './',
     include: ['tests/*.{test,spec}.?(c|m)[jt]s?(x)'],
+    typecheck: {
+      enabled: true,
+      include: ['tests/**/*.test-d.ts'],
+      tsconfig: './tsconfig.json',
+    },
     forceRerunTriggers: ['**/tests/methods/**'],
     coverage: {
       reporter: ['text', 'json', 'html', 'lcov'],

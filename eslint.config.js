@@ -43,6 +43,10 @@ export default defineConfig(
             // 'no-console': 'error',
             // 'no-ternary': 'error',
             'newline-before-return': 'error',
+            '@typescript-eslint/no-this-alias': [
+                'error',
+                { 'allowedNames': ['self'] },
+            ],
             'semi': ['error', 'never'],
             'quotes': ['error', 'single'],
             'no-unused-vars': 'off',

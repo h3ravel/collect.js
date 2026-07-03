@@ -1,4 +1,5 @@
 export * from './collection'
+export * from './lazyCollection'
 export * from './utilities/buildKeyPathMap'
 export * from './utilities/clone'
 export * from './utilities/deleteKeys'
