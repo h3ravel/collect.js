@@ -7,13 +7,26 @@ import buildKeyPathMap from './utilities/buildKeyPathMap'
 import clone from './utilities/clone'
 import deleteKeys from './utilities/deleteKeys'
 import getValues, { inspect } from './utilities/values'
+import { LazyCollection } from './lazyCollection'
 import nestedValue from './utilities/nestedValue'
 import variadic from './utilities/variadic'
 
 type Operator = '===' | '==' | '!==' | '!=' | '<>' | '>' | '<' | '>=' | '<=' | boolean
 type GenericObj<X = any> = Record<string, X>
 
-export class Collection<Item = any, AllResult = any> {
+/**
+ * Given the shape currently returned by `all()` (`AllResult`) and a new element
+ * type `T`, compute the shape `all()` should return after a container-kind
+ * preserving operation: arrays stay arrays, objects stay keyed records.
+ */
+type ReshapeAll<AllResult, T> =
+    AllResult extends readonly any[]
+    ? T[]
+    : AllResult extends object
+    ? Record<string, T>
+    : T[]
+
+export class Collection<Item = any, AllResult = Item[]> {
     private items: Item[]
 
     /**
@@ -34,7 +47,7 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The add method adds a single item to the collection.
      */
-    add (item: Item): this {
+    add(item: Item): this {
         this.items.push(item)
 
         return this
@@ -43,21 +56,21 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The all method returns the underlying array represented by the collection.
      */
-    all (): AllResult {
+    all(): AllResult {
         return this.items as AllResult
     }
 
     /**
      * Alias for the avg() method.
      */
-    average (key?: keyof Item | ((p: Item) => any)): number {
+    average(key?: keyof Item | ((p: Item) => any)): number {
         return this.avg(key)
     }
 
     /**
      * The avg method returns the average of all items in the collection.
      */
-    avg (key?: keyof Item | ((p: Item) => any)): number {
+    avg(key?: keyof Item | ((p: Item) => any)): number {
         if (!Array.isArray(this.items)) return 0
 
         if (typeof key === 'undefined') {
@@ -74,7 +87,7 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The chunk method breaks the collection into multiple, smaller collections of a given size.
      */
-    chunk (size: number): Collection<Item[]> {
+    chunk(size: number): Collection<Collection<Item>, Collection<Item>[]> {
         const chunks = []
         let index = 0
 
@@ -108,14 +121,14 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The collapse method collapses a collection of arrays into a single, flat collection.
      */
-    collapse (): Collection<Item> {
+    collapse(): Collection<Item> {
         return new Collection<Item>([].concat(...getValues(this.items)))
     }
 
     /**
      * The combine method combines the keys of the collection with the values of another array or collection.
      */
-    combine<U, T = Item> (array: U[] | Collection): Collection<T> {
+    combine<U, T = Item>(array: U[] | Collection): Collection<T, Record<string, T>> {
         let values = array
 
         if (values instanceof Collection) {
@@ -140,14 +153,14 @@ export class Collection<Item = any, AllResult = any> {
             collection[this.items] = values
         }
 
-        return new Collection(collection)
+        return new Collection(collection) as never
     }
 
 
     /**
      * The concat method is used to merge two or more collections/arrays/objects.
      */
-    concat<T = Item> (collectionOrArrayOrObject: T[] | Record<string, T> | Collection<T>): any {
+    concat<T = Item>(collectionOrArrayOrObject: T[] | Record<string, T> | Collection<T>): any {
         let list: T[]
 
         if (collectionOrArrayOrObject instanceof Collection) {
@@ -179,7 +192,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param value 
      * @returns 
      */
-    contains<V, K = Item> (key: keyof Item | K | ((...args: any[]) => any), value?: V): boolean {
+    contains<V, K = Item>(key: keyof Item | K | ((...args: any[]) => any), value?: V): boolean {
         if (typeof value !== 'undefined') {
             if (Array.isArray(this.items)) {
                 return this.items
@@ -213,14 +226,14 @@ export class Collection<Item = any, AllResult = any> {
      * 
      * @returns 
      */
-    containsOneItem () {
+    containsOneItem() {
         return this.count() === 1
     }
 
     /**
      * The count method returns the total number of items in the collection.
      */
-    count (): number {
+    count(): number {
         let arrayLength = 0
 
         if (Array.isArray(this.items)) {
@@ -235,7 +248,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param fn 
      * @returns 
      */
-    countBy (fn: ((value: Item) => any) = value => value): Collection<number> {
+    countBy(fn: ((value: Item) => any) = value => value): Collection<number, Record<string, number>> {
         return new Collection<Item>(this.items)
             .groupBy(fn)
             .map((value: any) => value.count())
@@ -244,8 +257,8 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The crossJoin method cross joins the collection with the given array or collection, returning all possible permutations.
      */
-    crossJoin<T = Item> (...values: (T[] | Collection)[]): Collection<[Item, T]> {
-        function join (collection: any[], ...args: any[]) {
+    crossJoin<T = Item>(...values: (T[] | Collection)[]): Collection<[Item, T]> {
+        function join(collection: any[], ...args: any[]) {
             let current = args[0]
 
             if (current instanceof Collection) {
@@ -277,7 +290,7 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The dd method will console.log the collection and exit the current process.
      */
-    dd (...args: unknown[]): void {
+    dd(...args: unknown[]): void {
         this.dump(args)
 
         if (typeof process !== 'undefined') {
@@ -289,7 +302,7 @@ export class Collection<Item = any, AllResult = any> {
      * The diff method compares the collection against another collection or a plain array based on its values.
      * This method will return the values in the original collection that are not present in the given collection.
      */
-    diff<T = Item> (values: T[] | Collection<Item>): Collection<Item> {
+    diff<T = Item>(values: T[] | Collection<Item>): Collection<Item> {
         let valuesToDiff: T[] | Item[]
 
         if (values instanceof Collection) {
@@ -309,7 +322,7 @@ export class Collection<Item = any, AllResult = any> {
      * and values. This method will return the key / value pairs in the original collection that are not present in
      * the given collection:
      */
-    diffAssoc<T = Item> (values: T[] | Collection<T>): Collection<Item> {
+    diffAssoc<T = Item>(values: T[] | Collection<T>): Collection<Item> {
         let diffValues: any = values
 
         if (values instanceof Collection) {
@@ -334,7 +347,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param object 
      * @returns 
      */
-    diffKeys<K extends keyof Item> (object: object): Collection<K> {
+    diffKeys<K extends keyof Item>(object: object): Collection<K> {
         let objectToDiff
 
         if (object instanceof Collection) {
@@ -358,7 +371,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param object 
      * @returns 
      */
-    diffUsing<T = Item> (values: T[] | Collection<Item>, callback: (item: Item, otherItem: Item) => any) {
+    diffUsing<T = Item>(values: T[] | Collection<Item>, callback: (item: Item, otherItem: Item) => any) {
         let items: Item[] | [string, Item][]
 
         if (Array.isArray(this.items)) {
@@ -382,14 +395,14 @@ export class Collection<Item = any, AllResult = any> {
      * @param value 
      * @returns 
      */
-    doesntContain<V> (key: keyof Item | ((...args: any[]) => any), value?: V): boolean {
+    doesntContain<V>(key: keyof Item | ((...args: any[]) => any), value?: V): boolean {
         return !this.contains(key, value)
     }
 
     /**
      * The dot method allows accessing objects using the dot notation.
      */
-    dot (): this {
+    dot(): this {
         if (!isObject(this.items)) {
             return this
         }
@@ -397,7 +410,7 @@ export class Collection<Item = any, AllResult = any> {
         const sep = '.'
         const kv: GenericObj = {}
 
-        const stringify = <X extends object> (obj: X, prev?: string) => {
+        const stringify = <X extends object>(obj: X, prev?: string) => {
             const entries = Object.entries(obj)
             for (let i = 0; i < entries.length; i += 1) {
                 const [k, v] = entries[i]
@@ -422,7 +435,7 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The dump method outputs the results at that moment and then continues processing.
      */
-    dump (...args: unknown[]): this {
+    dump(...args: unknown[]): this {
         console.log(inspect(this))
         args.forEach((thing) => {
             console.log(inspect(thing))
@@ -436,7 +449,7 @@ export class Collection<Item = any, AllResult = any> {
      * 
      * @returns 
      */
-    duplicates (): Collection<Item> {
+    duplicates(): Collection<Item> {
         const occuredValues: any[] = []
         const duplicateValues: GenericObj = {}
 
@@ -476,7 +489,7 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The each method iterates over the items in the collection and passes each item to a callback.
      */
-    each (fn: (currentItem: Item, key?: string | number, collection?: Item[]) => any): this {
+    each(fn: (currentItem: Item, key?: string | number, collection?: Item[]) => any): this {
         let stop = false
 
         if (Array.isArray(this.items)) {
@@ -504,7 +517,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param fn 
      * @returns 
      */
-    eachSpread (fn: (...items: any[]) => any) {
+    eachSpread(fn: (...items: any[]) => any) {
         this.each((values: any, key) => {
             fn(...values, key)
         })
@@ -515,7 +528,7 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The every method may be used to verify that all elements of a collection pass a given truth test.
      */
-    every (fn: (item: Item) => boolean): boolean {
+    every(fn: (item: Item) => boolean): boolean {
         const items = getValues(this.items)
 
         return items.every(fn)
@@ -525,14 +538,14 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The except method returns all items in the collection except for those with the specified keys.
      */
-    except<K = Item> (...args: K[]): Collection<Item> {
+    except<K = Item>(...args: K[]): Collection<Item, ReshapeAll<AllResult, Item>> {
         const properties = variadic(args)
 
         if (Array.isArray(this.items)) {
             const collection = this.items
                 .filter(item => properties.indexOf(item) === -1)
 
-            return new Collection(collection)
+            return new Collection(collection) as never
         }
 
         const collection: GenericObj = {}
@@ -543,15 +556,15 @@ export class Collection<Item = any, AllResult = any> {
             }
         })
 
-        return new Collection(collection)
+        return new Collection(collection) as never
     }
 
     /**
      * The filter method filters the collection using the given callback,
      * keeping only those items that pass a given truth test.
      */
-    filter (fn: (item: Item) => boolean): Collection<Item>;
-    filter (fn: (item: Item, key?: any) => boolean): Collection<Item> {
+    filter(fn: (item: Item) => boolean): Collection<Item, ReshapeAll<AllResult, Item>>;
+    filter(fn: (item: Item, key?: any) => boolean): Collection<Item, ReshapeAll<AllResult, Item>> {
         const func = fn || false
         // eslint-disable-next-line no-useless-assignment
         let filteredItems = null
@@ -561,13 +574,13 @@ export class Collection<Item = any, AllResult = any> {
             filteredItems = filterObject(func, this.items)
         }
 
-        return new Collection(filteredItems)
+        return new Collection(filteredItems) as never
     }
 
     /**
      * The first method returns the first element in the collection that passes a given truth test.
      */
-    first (fn?: (item: Item, key: any) => boolean, defaultValue?: ((...any: any[]) => any) | any): Item | undefined {
+    first(fn?: (item: Item, key: any) => boolean, defaultValue?: ((...any: any[]) => any) | any): Item | undefined {
         if (isFunction(fn)) {
             const keys = Object.keys(this.items)
 
@@ -611,7 +624,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param value 
      * @returns 
      */
-    firstOrFail<V> (key?: keyof Item, operator?: Operator, value?: V | null | undefined) {
+    firstOrFail<V>(key?: keyof Item, operator?: Operator, value?: V | null | undefined) {
         if (isFunction(key)) {
             return this.first(key, () => {
                 throw new Error('Item not found.')
@@ -634,7 +647,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param value 
      * @returns 
      */
-    firstWhere<V, K = Item> (key?: keyof Item, operator?: Operator | K, value?: V | null | undefined) {
+    firstWhere<V, K = Item>(key?: keyof Item, operator?: Operator | K, value?: V | null | undefined) {
         return this.where(key, operator, value).first()
     }
 
@@ -643,20 +656,20 @@ export class Collection<Item = any, AllResult = any> {
      * The callback is free to modify the item and return it, thus forming a new collection of modified items.
      * Then, the array is flattened by a level.
      */
-    flatMap<T = Item> (fn: (item: Item, key: any) => T): Collection<T> {
+    flatMap<T = Item>(fn: (item: Item, key: any) => T): Collection<T> {
         return this.map(fn).collapse()
     }
 
     /**
      * The flatten method flattens a multi-dimensional collection into a single dimension.
      */
-    flatten (depth?: number): Collection<Item> {
+    flatten(depth?: number): Collection<Item> {
         let flattenDepth = depth || Infinity
 
         let fullyFlattened = false
         let collection: any[] = []
 
-        const flat = function flat (items: any) {
+        const flat = function flat(items: any) {
             collection = []
 
             if (isArray(items)) {
@@ -702,7 +715,7 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The flip method swaps the collection's keys with their corresponding values.
      */
-    flip (): Collection<Item> {
+    flip(): Collection<string | number, Record<string, string | number>> {
         const collection: GenericObj = {}
 
         if (Array.isArray(this.items)) {
@@ -715,14 +728,14 @@ export class Collection<Item = any, AllResult = any> {
             })
         }
 
-        return new Collection(collection)
+        return new Collection(collection) as never
     }
 
 
     /**
      * The forget method removes an item from the collection by its key.
      */
-    forget<K = Item> (key: keyof Item | K): this {
+    forget<K = Item>(key: keyof Item | K): this {
         if (Array.isArray(this.items)) {
             this.items.splice(key as never, 1)
         } else {
@@ -738,7 +751,7 @@ export class Collection<Item = any, AllResult = any> {
      * The method accepts the page number as its first argument
      * and the number of items to show per page as its second argument.
      */
-    forPage (page: number, chunk: number): Collection<Item> {
+    forPage(page: number, chunk: number): Collection<Item, ReshapeAll<AllResult, Item>> {
         let collection: GenericObj = {}
 
         if (Array.isArray(this.items)) {
@@ -752,14 +765,14 @@ export class Collection<Item = any, AllResult = any> {
                 })
         }
 
-        return new Collection<Item>(collection)
+        return new Collection<Item>(collection) as never
     }
 
 
     /**
      * The get method returns the item at a given key. If the key does not exist, null is returned.
      */
-    get<V, K = Item> (key: keyof Item | K, defaultValue?: ((...any: any[]) => V | Item) | V | Item) {
+    get<V, K = Item>(key: keyof Item | K, defaultValue?: ((...any: any[]) => V | Item) | V | Item) {
         if (typeof this.items[key as never] !== 'undefined') {
             return this.items[key as never]
         }
@@ -779,7 +792,7 @@ export class Collection<Item = any, AllResult = any> {
      * The groupBy method groups the collection's items by a given key.
      *
      */
-    groupBy<K> (key: ((item: Item, index?: number) => K) | keyof Item | K): Collection<Collection<Item>> {
+    groupBy<K>(key: ((item: Item, index?: number) => K) | keyof Item | K): Collection<Collection<Item>, Record<string, Collection<Item>>> {
         const collection: GenericObj = {}
 
         if (Array.isArray(this.items)) {
@@ -826,7 +839,7 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The has method determines if one or more keys exists in the collection.
      */
-    has (...args: any[]): boolean {
+    has(...args: any[]): boolean {
         const properties = variadic(args)
 
         return properties.filter(key => Object.hasOwnProperty.call(this.items, key)).length
@@ -842,7 +855,7 @@ export class Collection<Item = any, AllResult = any> {
      * you should pass the key of the attributes you wish to join,
      * and the "glue" string you wish to place between the values.
      */
-    implode<K = Item> (key: keyof Item | K, glue?: string): string {
+    implode<K = Item>(key: keyof Item | K, glue?: string): string {
         if (typeof glue === 'undefined' && Array.isArray(this.items)) {
             return this.items.join(String(key))
         }
@@ -855,7 +868,7 @@ export class Collection<Item = any, AllResult = any> {
      * that are not present in the given array or collection.
      * The resulting collection will preserve the original collection's keys.
      */
-    intersect (values: Item[] | Collection<Item>): Collection<Item> {
+    intersect(values: Item[] | Collection<Item>): Collection<Item> {
         let intersectValues: Item[] = values as never
 
         if (values instanceof Collection) {
@@ -873,7 +886,7 @@ export class Collection<Item = any, AllResult = any> {
      * The intersectByKeys method removes any keys from the original collection
      * that are not present in the given array or collection.
      */
-    intersectByKeys<K extends keyof Item> (values: Item | Collection<Item>): Collection<K> {
+    intersectByKeys<K extends keyof Item>(values: Item | Collection<Item>): Collection<K> {
         let intersectKeys = Object.keys(values as never)
 
         if (values instanceof this.constructor) {
@@ -894,7 +907,7 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The isEmpty method returns true if the collection is empty; otherwise, false is returned.
      */
-    isEmpty (): boolean {
+    isEmpty(): boolean {
         if (Array.isArray(this.items)) {
             return !this.items.length
         }
@@ -906,7 +919,7 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The isNotEmpty method returns true if the collection is not empty; otherwise, false is returned.
      */
-    isNotEmpty (): boolean {
+    isNotEmpty(): boolean {
         return !this.isEmpty()
     }
 
@@ -917,7 +930,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param finalGlue 
      * @returns 
      */
-    join (glue: string, finalGlue: string) {
+    join(glue: string, finalGlue: string) {
         const collection = this.values()
 
         if (finalGlue === undefined) {
@@ -943,7 +956,7 @@ export class Collection<Item = any, AllResult = any> {
      * The keyBy method keys the collection by the given key.
      * If multiple items have the same key, only the last one will appear in the new collection.
      */
-    keyBy<K, T = Item> (key: keyof K | ((...args: any[]) => any)): Collection<T> {
+    keyBy<K, T = Item>(key: keyof K | ((...args: any[]) => any)): Collection<T, Record<string, T>> {
         const collection: GenericObj = {}
 
         if (isFunction(key)) {
@@ -958,27 +971,37 @@ export class Collection<Item = any, AllResult = any> {
             })
         }
 
-        return new Collection(collection)
+        return new Collection(collection) as never
     }
 
 
     /**
      * The keys method returns all of the collection's keys.
      */
-    keys (): Collection<string> {
+    keys(): Collection<string | number, (string | number)[]> {
         let collection = Object.keys(this.items)
 
         if (Array.isArray(this.items)) {
             collection = collection.map(Number) as never
         }
 
-        return new Collection(collection)
+        return new Collection(collection) as never
+    }
+
+    /**
+     * The lazy method returns a new LazyCollection instance from the underlying
+     * array of items. A lazy collection is backed by a generator, so operations
+     * such as map/filter/take are only evaluated as items are pulled, allowing
+     * you to work with very large — or even infinite — data sets.
+     */
+    lazy(): LazyCollection<Item> {
+        return new LazyCollection<Item>(getValues(this.items) as Item[])
     }
 
     /**
      * The last method returns the last element in the collection that passes a given truth test.
      */
-    last (fn?: (item: Item) => boolean, defaultValue?: any): Item {
+    last(fn?: (item: Item) => boolean, defaultValue?: any): Item {
         let { items } = this
 
         if (isFunction(fn)) {
@@ -1004,7 +1027,7 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The macro method lets you register custom methods.
      */
-    macro (name: string, fn: (...args: any[]) => any): void {
+    macro(name: string, fn: (...args: any[]) => any): void {
         this.constructor.prototype[name] = fn
     }
 
@@ -1014,10 +1037,10 @@ export class Collection<Item = any, AllResult = any> {
      * @param items 
      * @returns 
      */
-    make<Item> (items: Item[]): Collection<Item, Item[]>
-    make<Item extends Record<string, any>> (items: Item): Collection<Item[keyof Item], Item>
-    make<Item = any> (items?: Record<string, Item> | Item[] | Item): Collection<Item>
-    make<Item = any> (items: Record<string, Item> | Item[] | Item = [] as Item[]) {
+    make<Item>(items: Item[]): Collection<Item, Item[]>
+    make<Item extends Record<string, any>>(items: Item): Collection<Item[keyof Item], Item>
+    make<Item = any>(items?: Record<string, Item> | Item[] | Item): Collection<Item>
+    make<Item = any>(items: Record<string, Item> | Item[] | Item = [] as Item[]) {
         return new Collection(items)
     }
 
@@ -1027,10 +1050,10 @@ export class Collection<Item = any, AllResult = any> {
      * @param items 
      * @returns 
      */
-    static make<Item> (items: Item[]): Collection<Item, Item[]>
-    static make<Item extends Record<string, any>> (items: Item): Collection<Item[keyof Item], Item>
-    static make<Item = any> (items?: Record<string, Item> | Item[] | Item): Collection<Item>
-    static make<Item = any> (items?: Record<string, Item> | Item[] | Item) {
+    static make<Item>(items: Item[]): Collection<Item, Item[]>
+    static make<Item extends Record<string, any>>(items: Item): Collection<Item[keyof Item], Item>
+    static make<Item = any>(items?: Record<string, Item> | Item[] | Item): Collection<Item>
+    static make<Item = any>(items?: Record<string, Item> | Item[] | Item) {
         return new Collection(items)
     }
 
@@ -1038,9 +1061,9 @@ export class Collection<Item = any, AllResult = any> {
      * The map method iterates through the collection and passes each value to the given callback.
      * The callback is free to modify the item and return it, thus forming a new collection of modified items.
      */
-    map<T = Item> (fn: (items: Item, index: any, key?: any) => T): Collection<T> {
+    map<T = Item>(fn: (items: Item, index: any, key?: any) => T): Collection<T, ReshapeAll<AllResult, T>> {
         if (Array.isArray(this.items)) {
-            return new Collection(this.items.map(fn))
+            return new Collection(this.items.map(fn)) as never
         }
 
         const collection: GenericObj = {}
@@ -1049,23 +1072,23 @@ export class Collection<Item = any, AllResult = any> {
             collection[key] = fn(value as never, key)
         })
 
-        return new Collection(collection)
+        return new Collection(collection) as never
     }
 
     /**
      * The mapInto method iterates through the collection and instantiates the given class with each element as a constructor.
      */
-    mapInto<T extends new (...args: any[]) => any> (ClassName: T): Collection<T> {
-        return this.map((value, key) => new ClassName(value, key))
+    mapInto<T extends new (...args: any[]) => any>(ClassName: T): Collection<InstanceType<T>, ReshapeAll<AllResult, InstanceType<T>>> {
+        return this.map((value, key) => new ClassName(value, key)) as never
     }
 
-    mapSpread (fn: (...items: Item[]) => any) {
+    mapSpread(fn: (...items: Item[]) => any) {
         return this.map((values: any, key) => {
             return fn(...values, key)
         })
     }
 
-    mapToDictionary (fn: (item: Item, index: any) => [any, any]): Collection<Item> {
+    mapToDictionary(fn: (item: Item, index: any) => [any, any]): Collection<Item, Record<string, Item[]>> {
         const collection: GenericObj = {}
 
         this.items.forEach((item, k) => {
@@ -1078,13 +1101,13 @@ export class Collection<Item = any, AllResult = any> {
             }
         })
 
-        return new Collection<Item>(collection)
+        return new Collection<Item>(collection) as never
     }
 
     /**
      * The mapToGroups method iterates through the collection and passes each value to the given callback.
      */
-    mapToGroups (fn: (item: Item, key: string | number) => [any, any]): Collection<any> {
+    mapToGroups(fn: (item: Item, key: string | number) => [any, any]): Collection<any, Record<string, any[]>> {
         const collection: GenericObj = {}
 
         this.items.forEach((item, key) => {
@@ -1097,7 +1120,7 @@ export class Collection<Item = any, AllResult = any> {
             }
         })
 
-        return new Collection(collection)
+        return new Collection(collection) as never
     }
 
 
@@ -1105,8 +1128,11 @@ export class Collection<Item = any, AllResult = any> {
      * The mapWithKeys method iterates through the collection and passes each value to the given callback.
      * The callback should return an array where the first element represents the key
      * and the second element represents the value pair.
+     * 
+     * @param fn 
+     * @returns 
      */
-    mapWithKeys<T = Item> (fn: (item: Item, index: number | string) => [string, any]): Collection<T> {
+    mapWithKeys<T = Item>(fn: (item: Item, index: number | string) => [string, any]): Collection<T, Record<string, T>> {
         const collection: GenericObj = {}
 
         if (Array.isArray(this.items)) {
@@ -1121,14 +1147,17 @@ export class Collection<Item = any, AllResult = any> {
             })
         }
 
-        return new Collection(collection)
+        return new Collection(collection) as never
     }
 
 
     /**
      * The max method returns the maximum value of a given key.
+     * 
+     * @param key 
+     * @returns 
      */
-    max (key?: keyof Item | string): number {
+    max(key?: keyof Item | string): number {
         if (typeof key === 'string') {
             const filtered = this.items.filter(item => item[key as never] !== undefined)
 
@@ -1142,7 +1171,7 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The median method returns the median value of a given key.
      */
-    median<K = Item> (key?: keyof Item | K): number {
+    median<K = Item>(key?: keyof Item | K): number {
         const { length } = this.items
 
         if (key === undefined) {
@@ -1168,7 +1197,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param value 
      * @returns 
      */
-    merge<T = Item> (value: GenericObj | T[]): Collection<T> {
+    merge<T = Item>(value: GenericObj | T[]): Collection<T, ReshapeAll<AllResult, T>> {
         let arrayOrObject: GenericObj = value
 
         if (typeof arrayOrObject === 'string') {
@@ -1185,7 +1214,7 @@ export class Collection<Item = any, AllResult = any> {
             collection[key] = arrayOrObject[key]
         })
 
-        return new Collection<T>(collection)
+        return new Collection<T>(collection) as never
     }
 
     /**
@@ -1196,7 +1225,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param items 
      * @returns 
      */
-    mergeRecursive (items: GenericObj | Collection): Collection<Item> {
+    mergeRecursive(items: GenericObj | Collection): Collection<Item, AllResult> {
         const merge = (target: GenericObj, source: GenericObj) => {
             const merged: GenericObj = {}
 
@@ -1229,17 +1258,20 @@ export class Collection<Item = any, AllResult = any> {
         }
 
         if (items instanceof Collection) {
-            return new Collection(merge(this.items, items.all()))
+            return new Collection(merge(this.items, items.all())) as never
         }
 
-        return new Collection(merge(this.items, items))
+        return new Collection(merge(this.items, items)) as never
     }
 
 
     /**
      * The min method returns the minimum value of a given key.
+     * 
+     * @param key 
+     * @returns 
      */
-    min<K = Item> (key?: keyof Item | K): number {
+    min<K = Item>(key?: keyof Item | K): number {
         if (typeof key !== 'undefined') {
             const filtered = this.items.filter(item => item[key as never] !== undefined)
 
@@ -1252,8 +1284,11 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The mode method returns the mode value of a given key.
+     * 
+     * @param key 
+     * @returns 
      */
-    mode<K = Item> (key?: keyof Item | K): Item[] | null {
+    mode<K = Item>(key?: keyof Item | K): Item[] | null {
         const values: any[] = []
         let highestCount = 1
 
@@ -1294,8 +1329,12 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The nth method creates a new collection consisting of every n-th element.
+     * 
+     * @param n 
+     * @param offset 
+     * @returns 
      */
-    nth (n: number, offset?: number): Collection<Item> {
+    nth(n: number, offset?: number): Collection<Item> {
         const items = getValues(this.items)
 
         const collection = items
@@ -1307,15 +1346,18 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The only method returns the items in the collection with the specified keys.
+     * 
+     * @param args 
+     * @returns 
      */
-    only<K = Item> (...args: K[]): Collection<Item> {
+    only<K = Item>(...args: K[]): Collection<Item, ReshapeAll<AllResult, Item>> {
         const properties = variadic(args)
 
         if (Array.isArray(this.items)) {
             const collection = this.items
                 .filter(item => properties.indexOf(item) !== -1)
 
-            return new Collection(collection)
+            return new Collection(collection) as never
         }
 
         const collection: GenericObj = {}
@@ -1326,7 +1368,7 @@ export class Collection<Item = any, AllResult = any> {
             }
         })
 
-        return new Collection(collection)
+        return new Collection(collection) as never
     }
 
     /**
@@ -1335,7 +1377,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param value 
      * @returns 
      */
-    pad (size: number, value: number): Collection<Item, AllResult> {
+    pad(size: number, value: number): Collection<Item, AllResult> {
         const abs = Math.abs(size)
         const count = this.count()
 
@@ -1371,8 +1413,11 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The partition method may be combined with destructuring to separate elements
      * that pass a given truth test from those that do not.
+     * 
+     * @param fn 
+     * @returns 
      */
-    partition<T = Item> (fn: (item: Item) => boolean):
+    partition<T = Item>(fn: (item: Item) => boolean):
         T extends any[]
         ? Collection<Collection<T>>
         : T extends Record<string, any>
@@ -1411,15 +1456,22 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The pipe method passes the collection to the given callback and returns the result.
+     * 
+     * @param fn 
+     * @returns 
      */
-    pipe<U> (fn: (...any: any[]) => U): U {
+    pipe<U>(fn: (...any: any[]) => U): U {
         return fn(this)
     }
 
     /**
      * The pluck method retrieves all of the values for a given key.
+     * 
+     * @param value 
+     * @param key 
+     * @returns 
      */
-    pluck<K, V, T = Item> (value: keyof Item | V, key?: keyof K): Collection<T> {
+    pluck<K, V, T = Item>(value: keyof Item | V, key?: keyof K): Collection<T> {
         if ((value as string).indexOf('*') !== -1) {
             const keyPathMap = buildKeyPathMap(this.items as never)
 
@@ -1492,13 +1544,16 @@ export class Collection<Item = any, AllResult = any> {
             }
 
             return null
-        })
+        }) as never
     }
 
     /**
      * The pop method removes and returns the last item from the collection.
+     * 
+     * @param count 
+     * @returns 
      */
-    pop (count: number = 1): Item | Collection<Item> | undefined {
+    pop(count: number = 1): Item | Collection<Item> | undefined {
         if (this.isEmpty()) {
             return undefined
         }
@@ -1533,7 +1588,7 @@ export class Collection<Item = any, AllResult = any> {
 
             deleteKeys(this.items, poppedKeys)
 
-            return new Collection(newObject)
+            return new Collection(newObject) as never
         }
 
         return undefined
@@ -1541,8 +1596,12 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The prepend method adds an item to the beginning of the collection.
+     * 
+     * @param value 
+     * @param key 
+     * @returns 
      */
-    prepend<V, K = Item> (value: V, key?: K): this {
+    prepend<V, K = Item>(value: V, key?: K): this {
         if (typeof key !== 'undefined') {
             return this.put(key, value)
         }
@@ -1554,8 +1613,12 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The pull method removes and returns an item from the collection by its key.
+     * 
+     * @param key 
+     * @param defaultValue 
+     * @returns 
      */
-    pull<K = Item> (key: keyof Item | K, defaultValue?: any): Item | null {
+    pull<K = Item>(key: keyof Item | K, defaultValue?: any): Item | null {
         let returnValue = this.items[key as never] || null
 
         if (!returnValue && typeof defaultValue !== 'undefined') {
@@ -1574,8 +1637,11 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The push method appends an item to the end of the collection.
+     * 
+     * @param items 
+     * @returns 
      */
-    push (...items: Item[]): this {
+    push(...items: Item[]): this {
         this.items.push(...items)
 
         return this
@@ -1583,8 +1649,12 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The put method sets the given key and value in the collection.
+     * 
+     * @param key 
+     * @param value 
+     * @returns 
      */
-    put<V, K = Item> (key: K, value: V): this {
+    put<V, K = Item>(key: K, value: V): this {
         this.items[key as never] = value as never
 
         return this
@@ -1592,8 +1662,11 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The random method returns a random item from the collection.
+     * 
+     * @param length 
+     * @returns 
      */
-    random (length?: number | string): Collection<Item> {
+    random(length?: number | string): Collection<Item> {
         const items = getValues(this.items)
 
         const collection = new Collection(items).shuffle()
@@ -1609,8 +1682,12 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The reduce method reduces the collection to a single value,
      * passing the result of each iteration into the subsequent iteration.
+     * 
+     * @param fn 
+     * @param carry 
+     * @returns 
      */
-    reduce<T = Item> (fn: (_carry?: T | null, item?: Item, index?: number | string) => T, carry?: T): any {
+    reduce<T = Item>(fn: (_carry?: T | null, item?: Item, index?: number | string) => T, carry?: T): any {
         let reduceCarry: T | null | undefined = null
 
         if (typeof carry !== 'undefined') {
@@ -1633,9 +1710,12 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The reject method filters the collection using the given callback.
      * The callback should return true if the item should be removed from the resulting collection.
+     * 
+     * @param fn 
+     * @returns 
      */
-    reject (fn: (item: Item) => boolean): Collection<Item> {
-        return new Collection(this.items).filter(item => !fn(item))
+    reject(fn: (item: Item) => boolean): Collection<Item, ReshapeAll<AllResult, Item>> {
+        return new Collection(this.items).filter(item => !fn(item)) as never
     }
 
     /**
@@ -1644,7 +1724,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param items 
      * @returns 
      */
-    replace (items?: Item[] | Collection<Item> | GenericObj) {
+    replace(items?: Item[] | Collection<Item> | GenericObj) {
         if (!items) {
             return this
         }
@@ -1672,7 +1752,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param items 
      * @returns 
      */
-    replaceRecursive (items: Item[] | Collection | GenericObj): Collection<Item, AllResult> {
+    replaceRecursive(items: Item[] | Collection | GenericObj): Collection<Item, AllResult> {
 
         const replace = (target: GenericObj, source: GenericObj) => {
             const replaced = { ...target }
@@ -1725,7 +1805,7 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The reverse method reverses the order of the collection's items.
      */
-    reverse (): Collection<Item> {
+    reverse(): Collection<Item, ReshapeAll<AllResult, Item>> {
         const collection = Array.isArray(this.items)
             ? ([] as Item[]).concat(this.items).reverse()
             : Object.fromEntries(Object.entries(this.items).reverse())
@@ -1737,8 +1817,12 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The search method searches the collection for the given value and returns its key if found.
      * If the item is not found, false is returned.
+     * 
+     * @param valueOrFunction 
+     * @param strict 
+     * @returns 
      */
-    search (valueOrFunction: Item | ((value: Item, key: number) => boolean), strict?: boolean): any {
+    search(valueOrFunction: Item | ((value: Item, key: number) => boolean), strict?: boolean): any {
         let result: number | undefined = undefined
 
         const find = (_: any, key: number) => {
@@ -1768,8 +1852,11 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The shift method removes and returns the first item from the collection.
+     * 
+     * @param count 
+     * @returns 
      */
-    shift (count = 1): Collection<Item> | undefined {
+    shift(count = 1): Collection<Item> | undefined {
         if (this.isEmpty()) {
             return undefined
         }
@@ -1811,8 +1898,10 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The shuffle method randomly shuffles the items in the collection.
+     * 
+     * @returns 
      */
-    shuffle (): this {
+    shuffle(): this {
         const items = getValues(this.items)
 
         let j
@@ -1836,7 +1925,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param number 
      * @returns 
      */
-    skip (number: number): Collection<Item> {
+    skip(number: number): Collection<Item, ReshapeAll<AllResult, Item>> {
         if (isObject(this.items)) {
             return new Collection<Item>(
                 Object.keys(this.items)
@@ -1847,10 +1936,10 @@ export class Collection<Item = any, AllResult = any> {
 
                         return accumulator
                     }, {} as GenericObj),
-            )
+            ) as never
         }
 
-        return new Collection<Item>(this.items.slice(number))
+        return new Collection<Item>(this.items.slice(number)) as never
     }
 
     /**
@@ -1858,7 +1947,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param valueOrFunction 
      * @returns 
      */
-    skipUntil<K = Item> (valueOrFunction: Item | K | ((value: Item) => boolean)): Collection<Item> {
+    skipUntil<K = Item>(valueOrFunction: Item | K | ((value: Item) => boolean)): Collection<Item> {
         let previous: boolean | null = null
         let items
 
@@ -1900,7 +1989,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param valueOrFunction 
      * @returns 
      */
-    skipWhile (valueOrFunction: Item | ((value: Item) => boolean)): Collection<Item> {
+    skipWhile(valueOrFunction: Item | ((value: Item) => boolean)): Collection<Item> {
         let previous: boolean | null = null
         let items
 
@@ -1939,8 +2028,12 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The slice method returns a slice of the collection starting at the given index.
+     * 
+     * @param remove 
+     * @param limit 
+     * @returns 
      */
-    slice (remove: number, limit?: number): Collection<Item> {
+    slice(remove: number, limit?: number): Collection<Item> {
         let collection = this.items.slice(remove)
 
         if (typeof limit !== 'undefined') {
@@ -1950,7 +2043,14 @@ export class Collection<Item = any, AllResult = any> {
         return new Collection(collection)
     }
 
-    sole<V, K = Item> (key?: keyof Item | K | ((val: Item) => any), operator?: Operator | K, value?: V) {
+    /**
+     * 
+     * @param key 
+     * @param operator 
+     * @param value 
+     * @returns 
+     */
+    sole<V, K = Item>(key?: keyof Item | K | ((val: Item) => any), operator?: Operator | K, value?: V) {
         let collection
 
         if (isFunction(key)) {
@@ -1978,14 +2078,17 @@ export class Collection<Item = any, AllResult = any> {
      * @alias contains
      * @returns 
      */
-    some<V> (key: keyof Item | ((...args: any[]) => any), value?: V): boolean {
+    some<V>(key: keyof Item | ((...args: any[]) => any), value?: V): boolean {
         return this.contains(key, value)
     }
 
     /**
      * The sort method sorts the collection.
+     * 
+     * @param fn 
+     * @returns 
      */
-    sort (fn?: (a: Item, b: Item) => number): Collection<Item> {
+    sort(fn?: (a: Item, b: Item) => number): Collection<Item, Item[]> {
         const collection = [].concat(this.items as never)
 
         if (typeof fn === 'undefined') {
@@ -2004,30 +2107,40 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The sortBy method sorts the collection by the given key.
      * The sorted collection keeps the original array keys.
+     * 
+     * @param value 
      */
-    sortBy<V> (value: V): Collection<Item>
+    sortBy<V>(value: V): Collection<Item>
     /**
      * The sortBy method sorts the collection by the given callback.
      * The sorted collection keeps the original array keys.
+     * 
+     * @param fn 
      */
-    sortBy (fn: (item: Item) => number): Collection<Item>
+    sortBy(fn: (item: Item) => number): Collection<Item>
     /**
      * The sortByMany method sorts the collection by the given keys.
      * The sorted collection keeps the original array keys.
+     * 
+     * @param keys 
      */
-    sortBy<V> (keys: V[]): Collection<Item>
+    sortBy<V>(keys: V[]): Collection<Item>
     /**
      * The sortByMany method sorts the collection by the given callbacks.
      * The sorted collection keeps the original array keys.
+     * 
+     * @param fns 
      */
-    sortBy (fns: ((item: Item) => number)[]): Collection<Item>
+    sortBy(fns: ((item: Item) => number)[]): Collection<Item>
     /**
      * The sortBy method sorts the collection by the given callback.
      * The sorted collection keeps the original array keys.
+     * 
+     * @param fn 
      */
-    sortBy (fn: (item: Item) => number): Collection<Item>
-    sortBy<V> (key: V[] | ((item: Item) => number)): Collection<Item>
-    sortBy<V> (key: V[] | ((item: Item) => number)): Collection<Item> {
+    sortBy(fn: (item: Item) => number): Collection<Item>
+    sortBy<V>(key: V[] | ((item: Item) => number)): Collection<Item>
+    sortBy<V>(key: V[] | ((item: Item) => number)): Collection<Item> {
         if (isArray(key)) {
             return this.sortByMany(key)
         }
@@ -2068,22 +2181,29 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * This method has the same signature as the sortBy method,
      * but will sort the collection in the opposite order.
+     * 
+     * @param value 
      */
-    sortByDesc<V> (value: V): Collection<Item>
+    sortByDesc<V>(value: V): Collection<Item>
     /**
      * This method has the same signature as the sortBy method,
      * but will sort the collection in the opposite order.
+     * 
+     * @param fn 
      */
-    sortByDesc (fn: (item: Item) => number): Collection<Item>
-    sortByDesc (fn: (item: Item) => number): Collection<Item> {
+    sortByDesc(fn: (item: Item) => number): Collection<Item>
+    sortByDesc(fn: (item: Item) => number): Collection<Item> {
         return this.sortBy(fn).reverse()
     }
 
     /**
      * The sortByMany method sorts the collection by the given callbacks.
      * The sorted collection keeps the original array keys.
+     * 
+     * @param value 
+     * @returns 
      */
-    sortByMany<V> (value: (V | (() => any))[]): Collection<Item> {
+    sortByMany<V>(value: (V | (() => any))[]): Collection<Item> {
         const getValue = (item: any, valueOrFunction: any) => {
             if (isFunction(valueOrFunction)) {
                 return valueOrFunction(item)
@@ -2127,11 +2247,11 @@ export class Collection<Item = any, AllResult = any> {
      * 
      * @returns 
      */
-    sortDesc () {
+    sortDesc() {
         return this.sort().reverse()
     }
 
-    sortKeys (): Collection<Item> {
+    sortKeys(): Collection<Item> {
         const ordered: GenericObj = {}
 
         Object.keys(this.items).sort().forEach((key) => {
@@ -2145,7 +2265,7 @@ export class Collection<Item = any, AllResult = any> {
      * 
      * @returns 
      */
-    sortKeysDesc (): Collection<Item> {
+    sortKeysDesc(): Collection<Item> {
         const ordered: GenericObj = {}
 
         Object.keys(this.items).sort().reverse().forEach((key) => {
@@ -2158,8 +2278,13 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The splice method removes and returns a slice of items starting at the specified index.
      * You may pass a second argument to limit the size of the resulting chunk.
+     * 
+     * @param index 
+     * @param limit 
+     * @param replace 
+     * @returns 
      */
-    splice (index: number, limit: number, replace?: Item[]): Collection<Item> {
+    splice(index: number, limit: number, replace?: Item[]): Collection<Item> {
         const slicedCollection = this.slice(index, limit)
 
         this.items = this.diff(slicedCollection.all() as never).all() as never
@@ -2177,8 +2302,11 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The split method breaks a collection into the given number of groups.
+     * 
+     * @param numberOfGroups 
+     * @returns 
      */
-    split (numberOfGroups: number): Collection {
+    split(numberOfGroups: number): Collection {
         const itemsPerGroup = Math.round(this.items.length as number / numberOfGroups)
 
         const items = JSON.parse(JSON.stringify(this.items))
@@ -2193,8 +2321,11 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The sum method returns the sum of all items in the collection.
+     * 
+     * @param key 
+     * @returns 
      */
-    sum<K = Item> (key?: keyof Item | K | ((item: Item) => number | string)): number {
+    sum<K = Item>(key?: keyof Item | K | ((item: Item) => number | string)): number {
         const items = getValues(this.items)
 
         let total = 0
@@ -2220,8 +2351,11 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The take method returns a new collection with the specified number of items:
      * You may also pass a negative integer to take the specified amount of items from the end of the collection.
+     * 
+     * @param length 
+     * @returns 
      */
-    take (length: number): Collection<Item> {
+    take(length: number): Collection<Item, ReshapeAll<AllResult, Item>> {
         if (!Array.isArray(this.items) && typeof this.items === 'object') {
             const keys = Object.keys(this.items)
             let slicedKeys
@@ -2240,22 +2374,21 @@ export class Collection<Item = any, AllResult = any> {
                 }
             })
 
-            return new Collection(collection)
+            return new Collection(collection) as never
         }
 
         if (length < 0) {
-            return new Collection(this.items.slice(length))
+            return new Collection(this.items.slice(length)) as never
         }
 
-        return new Collection(this.items.slice(0, length))
+        return new Collection(this.items.slice(0, length)) as never
     }
 
     /**
-     * 
      * @param valueOrFunction 
      * @returns 
      */
-    takeUntil (valueOrFunction: Item | ((value: Item) => boolean)): Collection<Item> {
+    takeUntil(valueOrFunction: Item | ((value: Item) => boolean)): Collection<Item> {
         let previous: boolean | null = null
         let items
 
@@ -2294,11 +2427,10 @@ export class Collection<Item = any, AllResult = any> {
 
 
     /**
-     * 
      * @param valueOrFunction 
      * @returns 
      */
-    takeWhile (valueOrFunction: Item | ((value: Item) => boolean)): Collection<Item> {
+    takeWhile(valueOrFunction: Item | ((value: Item) => boolean)): Collection<Item> {
         let previous: boolean | null = null
         let items
 
@@ -2340,8 +2472,11 @@ export class Collection<Item = any, AllResult = any> {
      * The tap method passes the collection to the given callback,
      * allowing you to "tap" into the collection at a specific point
      * and do something with the items while not affecting the collection itself.
+     * 
+     * @param fn 
+     * @returns 
      */
-    tap (fn: (collection: Collection<Item, AllResult>) => void): this {
+    tap(fn: (collection: Collection<Item, AllResult>) => void): this {
         fn(this)
 
         return this
@@ -2349,8 +2484,12 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The times method creates a new collection by invoking the callback a given amount of times.
+     * 
+     * @param times 
+     * @param fn 
+     * @returns 
      */
-    times (times: number, fn: (time: number) => any): this {
+    times(times: number, fn: (time: number) => any): this {
         for (let iterator = 1; iterator <= times; iterator += 1) {
             this.items.push(fn(iterator))
         }
@@ -2361,9 +2500,11 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The toArray method converts the collection into a plain array.
      * If the collection is an object, an array containing the values will be returned.
+     * 
+     * @returns 
      */
-    toArray (): Item[] {
-        function iterate (list: Collection | any[], collection: any[]) {
+    toArray(): Item[] {
+        function iterate(list: Collection | any[], collection: any[]) {
             const childCollection: any[] = []
 
             if (list instanceof Collection) {
@@ -2393,8 +2534,10 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The toJson method converts the collection into JSON string.
+     * 
+     * @returns 
      */
-    toJson (): string {
+    toJson(): string {
         if (typeof this.items === 'object' && !Array.isArray(this.items)) {
             return JSON.stringify(this.all())
         }
@@ -2402,19 +2545,22 @@ export class Collection<Item = any, AllResult = any> {
         return JSON.stringify(this.toArray())
     }
 
-    protected toJSON () {
+    protected toJSON() {
         return this.items
     }
 
-    protected static enumerable<X = any> (value: X): value is X & { length: number } {
+    protected static enumerable<X = any>(value: X): value is X & { length: number } {
         return value != null && typeof (value as any).length === 'number'
     }
 
     /**
      * The transform method iterates over the collection and calls the given callback with each item in the collection.
      * The items in the collection will be replaced by the values returned by the callback.
+     * 
+     * @param fn 
+     * @returns 
      */
-    transform<T = Item> (fn: (item: Item, key?: number) => T): this {
+    transform<T = Item>(fn: (item: Item, key?: number) => T): this {
         if (Array.isArray(this.items)) {
             this.items = this.items.map(fn) as never
         } else {
@@ -2435,8 +2581,11 @@ export class Collection<Item = any, AllResult = any> {
      * The union method adds the given array to the collection.
      * If the given array contains keys that are already in the original collection,
      * the original collection's values will be preferred.
+kkk     * 
+     * @param object 
+     * @returns 
      */
-    union<T = Item> (object: GenericObj): Collection<T> {
+    union<T = Item>(object: GenericObj): Collection<T, Record<string, T>> {
         const collection: GenericObj = JSON.parse(JSON.stringify(this.items))
 
         Object.keys(object).forEach((prop) => {
@@ -2445,14 +2594,17 @@ export class Collection<Item = any, AllResult = any> {
             }
         })
 
-        return new Collection(collection)
+        return new Collection(collection) as never
     }
 
 
     /**
      * The unique method returns all of the unique items in the collection.
+     * 
+     * @param key 
+     * @returns 
      */
-    unique<K = Item> (key?: keyof Item | K | ((...args: any[]) => any)): Collection<Item> {
+    unique<K = Item>(key?: keyof Item | K | ((...args: any[]) => any)): Collection<Item, Item[]> {
         let collection: Collection<Item> | Item[]
 
         if (key === undefined) {
@@ -2484,8 +2636,13 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The unless method will execute the given callback when the first argument given to the method evaluates to false.
+     * 
+     * @param condition 
+     * @param fn 
+     * @param defaultFn 
+     * @returns 
      */
-    unless (
+    unless(
         condition: boolean,
         fn: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>,
         defaultFn?: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>
@@ -2501,8 +2658,11 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The unwrap method will unwrap the given collection.
+     * 
+     * @param value 
+     * @returns 
      */
-    unwrap<T = Item> (value: T[] | Collection<T>): T[] {
+    unwrap<T = Item>(value: T[] | Collection<T>): T[] {
         if (value instanceof Collection) {
             return value.all() as never
         }
@@ -2512,16 +2672,17 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The values method returns a new collection with the keys reset to consecutive integers.
-     */
-    values<T = Item> (): Collection<T> {
-        return new Collection(getValues(this.items))
-    }
-
-    /**
      * 
      * @returns 
      */
-    undot (): Collection<Item, AllResult> {
+    values<T = Item>(): Collection<T, T[]> {
+        return new Collection(getValues(this.items)) as never
+    }
+
+    /**
+     * @returns 
+     */
+    undot(): Collection<Item, AllResult> {
         if (Array.isArray(this.items)) {
             return this
         }
@@ -2561,7 +2722,7 @@ export class Collection<Item = any, AllResult = any> {
      * 
      * @returns 
      */
-    unlessEmpty (
+    unlessEmpty(
         fn: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>,
         defaultFn?: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>
     ) {
@@ -2576,7 +2737,7 @@ export class Collection<Item = any, AllResult = any> {
      * 
      * @returns 
      */
-    unlessNotEmpty (
+    unlessNotEmpty(
         fn: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>,
         defaultFn?: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>
     ) {
@@ -2585,8 +2746,13 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The when method will execute the given callback when the first argument given to the method evaluates to true.
+     * 
+     * @param condition 
+     * @param fn 
+     * @param defaultFn 
+     * @returns 
      */
-    when (
+    when(
         condition: boolean,
         fn: (collection: Collection<Item, AllResult>, condition?: boolean) => Collection<Item, AllResult> | void | undefined,
         defaultFn?: (collection: Collection<Item, AllResult>, condition?: boolean) => Collection<Item, AllResult> | void | undefined
@@ -2604,11 +2770,12 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * Run the given callback if the result is empty
+     * 
      * @param fn 
      * @param defaultFn 
      * @returns 
      */
-    whenEmpty (
+    whenEmpty(
         fn: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>,
         defaultFn?: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>
     ) {
@@ -2635,7 +2802,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param defaultFn 
      * @returns 
      */
-    whenNotEmpty (
+    whenNotEmpty(
         fn: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>,
         defaultFn?: (collection: Collection<Item, AllResult>) => Collection<Item, AllResult>
     ) {
@@ -2658,10 +2825,13 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The where method filters the collection by a given key / value pair.
-    */
-    where<V, K = Item> (key: keyof Item | K, value: V): Collection<Item>
-    where<V, K = Item> (key?: keyof Item | K, operator?: Operator | K, value?: V | null | undefined): Collection<Item>
-    where<V, K = Item> (key?: keyof Item | K, operator?: Operator | K, value?: V | null | undefined): Collection<Item> {
+     * 
+     * @param key 
+     * @param value 
+     */
+    where<V, K = Item>(key: keyof Item | K, value: V): Collection<Item, Item[]>
+    where<V, K = Item>(key?: keyof Item | K, operator?: Operator | K, value?: V | null | undefined): Collection<Item, Item[]>
+    where<V, K = Item>(key?: keyof Item | K, operator?: Operator | K, value?: V | null | undefined): Collection<Item, Item[]> {
         let comparisonOperator = operator
         let comparisonValue: Operator | V | K = value!
 
@@ -2727,28 +2897,31 @@ export class Collection<Item = any, AllResult = any> {
      * @param values 
      * @returns 
      */
-    whereBetween<V, K = Item> (key: keyof Item | K, values: V[]): Collection<Item> {
+    whereBetween<V, K = Item>(key: keyof Item | K, values: V[]): Collection<Item, Item[]> {
         return this.where(key, '>=', values[0]).where(key, '<=', values[values.length - 1])
     }
 
     /**
      * The whereIn method filters the collection by a given key / value contained within the given array.
+     * 
+     * @param key 
+     * @param values 
+     * @returns 
      */
-    whereIn<V, K = Item> (key: keyof Item | K, values: V[]): Collection<Item> {
+    whereIn<V, K = Item>(key: keyof Item | K, values: V[]): Collection<Item, Item[]> {
         const items = getValues(values)
 
         const collection = this.items
             .filter(item => items.indexOf(nestedValue(item, String(key))) !== -1)
 
-        return new Collection(collection)
+        return new Collection(collection) as never
     }
 
     /**
-     * 
      * @param type 
      * @returns 
      */
-    whereInstanceOf (type: abstract new (...args: any[]) => any) {
+    whereInstanceOf(type: abstract new (...args: any[]) => any) {
         return this.filter(item => item instanceof type)
     }
 
@@ -2760,7 +2933,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param values 
      * @returns 
      */
-    whereNotBetween<V, K = Item> (key: keyof Item | K, values: V[]): Collection<Item> {
+    whereNotBetween<V, K = Item>(key: keyof Item | K, values: V[]): Collection<Item, ReshapeAll<AllResult, Item>> {
         return this.filter(item => (
             nestedValue(item, key as string) < values[0] || nestedValue(item, key as string) > values[values.length - 1]
         ))
@@ -2768,14 +2941,18 @@ export class Collection<Item = any, AllResult = any> {
 
     /**
      * The whereNotIn method filters the collection by a given key / value not contained within the given array.
+     * 
+     * @param key 
+     * @param values 
+     * @returns 
      */
-    whereNotIn<V, K = Item> (key: keyof Item | K, values: V[]): Collection<Item> {
+    whereNotIn<V, K = Item>(key: keyof Item | K, values: V[]): Collection<Item, Item[]> {
         const items = getValues(values)
 
         const collection = this.items
             .filter(item => items.indexOf(nestedValue(item, String(key))) === -1)
 
-        return new Collection(collection)
+        return new Collection(collection) as never
     }
 
     /**
@@ -2784,7 +2961,7 @@ export class Collection<Item = any, AllResult = any> {
      * @param key 
      * @returns 
      */
-    whereNotNull (key?: keyof Item) {
+    whereNotNull(key?: keyof Item) {
         return this.where(key, '!==', null)
     }
 
@@ -2794,20 +2971,23 @@ export class Collection<Item = any, AllResult = any> {
      * @param key 
      * @returns 
      */
-    whereNull<K = Item> (key: keyof Item | K | null | undefined = null) {
+    whereNull<K = Item>(key: keyof Item | K | null | undefined = null) {
         return this.where(key, '===', null)
     }
 
     /**
      * The wrap method will wrap the given value in a collection.
+     * 
+     * @param value 
+     * @returns 
      */
-    wrap<T = Item> (value: T | T[] | Collection<T>): Collection<T> {
+    wrap<T = Item>(value: T | T[] | Collection<T>): Collection<T> {
         if (value instanceof Collection) {
             return value
         }
 
         if (typeof value === 'object') {
-            return new Collection(value)
+            return new Collection(value) as never
         }
 
         return new Collection([value])
@@ -2818,7 +2998,7 @@ export class Collection<Item = any, AllResult = any> {
      *
      * @param  value
      */
-    static wrap<T> (value: T) {
+    static wrap<T>(value: T) {
         return this.enumerable(value)
             ? new Collection<T>(value)
             : new Collection<T>(Array.isArray(value) ? value : [value])
@@ -2827,8 +3007,11 @@ export class Collection<Item = any, AllResult = any> {
     /**
      * The zip method merges together the values of the given array with the values
      * of the original collection at the corresponding index.
+     * 
+     * @param array 
+     * @returns 
      */
-    zip<T = Item> (array: T[] | Collection): Collection<[Item, T]> {
+    zip<T = Item>(array: T[] | Collection): Collection<[Item, T]> {
         const items = Array.isArray(this.items) ? this.items : Object.values(this.items)
         let values = array
 
@@ -2841,7 +3024,7 @@ export class Collection<Item = any, AllResult = any> {
         return new Collection<[Item, T]>(collection as never)
     }
 
-    [Symbol.iterator] (): Iterator<Item> {
+    [Symbol.iterator](): Iterator<Item> {
         let index = -1
         const items: any = this.items
         const length = Array.isArray(this.items) ? this.items.length : Object.keys(this.items).length
@@ -2859,9 +3042,9 @@ export class Collection<Item = any, AllResult = any> {
     }
 }
 
-export function collect<Item> (collection: Item[]): Collection<Item, Item[]>
-export function collect<Item extends Record<string, any>> (collection: Item): Collection<Item[keyof Item], Item>
-export function collect<Item = any> (collection?: Record<string, Item> | Item[] | Item): Collection<Item>
-export function collect<Item = any> (collection?: Record<string, Item> | Item[] | Item) {
+export function collect<Item>(collection: Item[]): Collection<Item, Item[]>
+export function collect<Item extends Record<string, any>>(collection: Item): Collection<Item[keyof Item], Item>
+export function collect<Item = any>(collection?: Record<string, Item> | Item[] | Item): Collection<Item>
+export function collect<Item = any>(collection?: Record<string, Item> | Item[] | Item) {
     return new Collection(collection)
 }
